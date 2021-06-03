@@ -3,14 +3,14 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { HomeComponent } from './home';
 
-const usersModule = () => import('./users/users.module').then(x => x.UsersModule);
+const groomsModule = () => import('./grooms/grooms.module').then(x => x.GroomsModule);
 
 const routes: Routes = [
     { path: '', component: HomeComponent },
-    { path: 'users', loadChildren: usersModule },
+    { path: 'users', loadChildren: groomsModule },
 
     // otherwise redirect to home
-    { path: '**', redirectTo: '' }
+    { path: '**', redirectTo: 'users' }
 ];
 
 @NgModule({

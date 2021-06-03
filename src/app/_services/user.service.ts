@@ -2,31 +2,44 @@
 import { HttpClient } from '@angular/common/http';
 
 import { environment } from '@environments/environment';
-import { User } from '@app/_models';
+import { Person, User } from '@app/_models';
+import { Preferences } from '@app/_models/preferences';
 
-const baseUrl = `${environment.apiUrl}/users`;
+const baseUrl = `${environment.apiUrl}`;
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
     constructor(private http: HttpClient) { }
 
-    getAll() {
-        return this.http.get<User[]>(baseUrl);
+    getAll(base: string) {
+        return this.http.get<Person[]>(`${baseUrl}/${base}`);
     }
 
-    getById(id: string) {
-        return this.http.get<User>(`${baseUrl}/${id}`);
+    getById(id: string, base:string) {
+        return this.http.get<Person>(`${baseUrl}/${base}/${id}`);
     }
 
-    create(params: any) {
-        return this.http.post(baseUrl, params);
+    create(params: any, base:string) {
+        return this.http.post(`${baseUrl}/${base}`, params);
     }
 
-    update(id: string, params: any) {
-        return this.http.put(`${baseUrl}/${id}`, params);
+    update(id: string, params: any, base: string) {
+        return this.http.put(`${baseUrl}/${base}/${id}`, params);
     }
 
-    delete(id: string) {
-        return this.http.delete(`${baseUrl}/${id}`);
+    delete(id: string, base: string) {
+        return this.http.delete(`${baseUrl}/${base}/${id}`);
+    }
+
+    getByMobileNumber(mbNr:string, base:string) {
+        return this.http.get<Person>(`${baseUrl}/${base}/mobile/${mbNr}`);
+    }
+
+    getPreferences(userId: string, base: string) {
+        return this.http.get<Preferences>(`${baseUrl}/${base}/preferences/${userId}`);
+    }
+
+    savePreferences(userId: string, prefer: Preferences, base: string) {
+        return this.http.put<Preferences>(`${baseUrl}/${base}/preferences/${userId}`, prefer);
     }
 }
