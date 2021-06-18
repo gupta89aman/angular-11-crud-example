@@ -9,6 +9,7 @@ import { AddEditComponent } from './add-edit.component';
 //import { AddEditPreferComponent } from './add-edit-prefer.component';
 import { LocationService } from '@app/_services/location.service';
 import { AddEditPreferComponent } from './add-edit-prefer.component';
+import { MatchesComponent } from './matches.component';
 
 @NgModule({
     imports: [
@@ -21,7 +22,8 @@ import { AddEditPreferComponent } from './add-edit-prefer.component';
         LayoutComponent,
         ListComponent,
         AddEditComponent,
-        AddEditPreferComponent
+        AddEditPreferComponent,
+        MatchesComponent
     ],
     providers: [
         LocationService

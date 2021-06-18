@@ -33,11 +33,14 @@ export interface Person {
 export enum JobType {
     Govt = 'Govt',
     Private = 'Private',
-    Business = 'Business'
+    Business = 'Business',
+    HouseWife = 'HouseWife'
 }
 
 export enum Caste {
     Aggarwal = 'Aggarwal',
+    Mittal = 'Mittal',
+    Goyal = 'Goyal',
     Arora = 'Arora',
     Jain = 'Jain'
 }

@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
 import { Person, User } from '@app/_models';
 import { Preferences } from '@app/_models/preferences';
+import { PersonData } from '@app/_models/personData';
 
 const baseUrl = `${environment.apiUrl}`;
 
@@ -11,8 +12,9 @@ const baseUrl = `${environment.apiUrl}`;
 export class UserService {
     constructor(private http: HttpClient) { }
 
-    getAll(base: string) {
-        return this.http.get<Person[]>(`${baseUrl}/${base}`);
+    getAll(base: string, page: number = 0) {
+        console.log('page' + page);
+        return this.http.get<PersonData>(`${baseUrl}/${base}?page=${page}`);
     }
 
     getById(id: string, base:string) {
@@ -41,5 +43,9 @@ export class UserService {
 
     savePreferences(userId: string, prefer: Preferences, base: string) {
         return this.http.put<Preferences>(`${baseUrl}/${base}/preferences/${userId}`, prefer);
+    }
+
+    getMatches(mobileNr: string, base: string, page: number = 0) {
+        return this.http.get<PersonData>(`${baseUrl}/${base}/matches/mobile/${mobileNr}?page=${page}`);
     }
 }

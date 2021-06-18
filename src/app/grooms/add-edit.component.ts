@@ -85,7 +85,7 @@ export class AddEditComponent implements OnInit {
             height: ['60', Validators.required],
             address: [''],
             userId:[''],
-            diet: [['veg']],
+            diet: ['veg'],
             drink: ['no'],
             smoking: ['false']
             //password: ['', [Validators.minLength(6), this.isAddMode ? Validators.required : Validators.nullValidator]],
@@ -99,6 +99,7 @@ export class AddEditComponent implements OnInit {
                                 let p: Person = this.formatPerson(x); 
                                 this.person = p; 
                                 this.form.patchValue(p);
+                                console.log(p);
                             });
         }
     }
@@ -152,6 +153,8 @@ export class AddEditComponent implements OnInit {
 
     private createGroom() {
         this.person = this.form.value;
+        console.log(this.person);
+        return;
         this.person.manglik = this.person.manglik || false;
         this.person.paid = this.person.paid || false;
         this.person.nativePlace = this.person.nativePlace || this.person.cityOfBirth as string;
@@ -174,6 +177,7 @@ export class AddEditComponent implements OnInit {
     private updateUser() {
         let prsn = this.getUpdatedPerson(this.form.value);
         prsn.userId = this.id;
+        console.log(prsn);
         this.userService.update(this.id, prsn, this.path)
             .pipe(first())
             .subscribe(() => {

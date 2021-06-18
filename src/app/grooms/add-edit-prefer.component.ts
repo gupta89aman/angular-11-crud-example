@@ -114,7 +114,7 @@ export class AddEditPreferComponent implements OnInit {
     getJobCities(state: string){
         this.jobCities = [];
         this.form.value["jobState"].forEach((ele: string) => {
-            let city = this.locationService.getCities(ele);
+            let city = this.locationService.getPreferencesCity(ele);
             this.jobCities = this.jobCities.concat(city);
         });
     }
@@ -122,7 +122,7 @@ export class AddEditPreferComponent implements OnInit {
     getCities(state: string) {
         this.cities = [];
         this.form.value["statePref"].forEach((ele: string) => {
-            let city = this.locationService.getCities(ele);
+            let city = this.locationService.getPreferencesCity(ele);
             this.cities = this.cities.concat(city);
         });
     }

@@ -18,7 +18,7 @@
         </div> -->
         <div class="form-group col-3">
             <label>dob</label>
-            <input type="date" formControlName="dob" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.dob.errors }" />
+            <input type="date" id="dob" formControlName="dob" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.dob.errors }" />
             <div *ngIf="submitted && f.dob.errors" class="invalid-feedback">
                 <div *ngIf="f.dob.errors.required">dob is required</div>
             </div>
@@ -183,8 +183,9 @@
         </div>
         <div class="form-group col-2">
             <label>Diet</label>
-            <select formControlName="diet" multiple class="form-control" >
+            <select formControlName="diet" class="form-control" >
                 <option value="veg">Veg</option>
+                <option value="egg">Eggaterian</option>
                 <option value="non-veg">Non-Veg</option>
             </select>
         </div>

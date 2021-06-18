@@ -11,6 +11,11 @@ export class ListComponent implements OnInit {
     path!: string;
     mbNr!:string;
     person!: Person;
+    page!: number;
+    count!: number;
+    loopArray!: number[];
+    currentPage!: number;
+    firstRequest!: boolean;
     constructor(
         private route: ActivatedRoute,
         private router: Router,
@@ -18,16 +23,39 @@ export class ListComponent implements OnInit {
             this.router.routeReuseStrategy.shouldReuseRoute = function(){
                 return false;
         }
+        this.firstRequest = true;
     }
 
     ngOnInit() {
         this.route.queryParamMap
         .pipe(map(params => params.get('path') || 'None')).subscribe(result => this.path = result);
-        this.userService.getAll(this.path)
-            .pipe(first())
-            .subscribe(persons => this.persons = persons);
+        this.currentPage = 0;
+        this.getAll(this.path);
+
     }
 
+    //get all the users based on page number
+    getAll(type : any , pageNr: number = 0) {
+        console.log(pageNr);
+        if(this.firstRequest !== true && this.currentPage == pageNr) {
+            return;
+        }
+        console.log('page');
+        this.firstRequest = false;
+        this.currentPage = pageNr;
+        this.userService.getAll(type, pageNr)
+            .pipe(first())
+            .subscribe(persons => {
+                this.persons = persons.users;
+                this.count = persons.count;
+                this.page =  Math.ceil(persons.total / 10);
+                //used for paging purpose,stores page numbers to show on front html view
+                this.loopArray = new Array(this.page);
+            });
+    }
+
+
+    //method to delete the user
     deleteUser(id: string) {
         const user = this.persons.find(x => x.userId === id);
         if (!user) return;
@@ -38,6 +66,8 @@ export class ListComponent implements OnInit {
             .subscribe(() => this.persons = this.persons.filter(x => x.userId !== id));
     }
 
+
+    //method to search particular person based on mobile number
     onSubmit() {
         if(this.mbNr) {
             let index = this.persons.findIndex(persn => persn.waNr === this.mbNr)
@@ -52,7 +82,7 @@ export class ListComponent implements OnInit {
                 .pipe(first())
                 .subscribe(person => {
                     if(Object.keys(person).length > 1) {
-                        this.persons.push(person);
+                        this.persons[0] = person;
                     }
                 });
             }

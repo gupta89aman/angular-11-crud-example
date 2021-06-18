@@ -5,6 +5,7 @@ import { LayoutComponent } from './layout.component';
 import { ListComponent } from './list.component';
 import { AddEditComponent } from './add-edit.component';
 import { AddEditPreferComponent } from './add-edit-prefer.component';
+import { MatchesComponent } from './matches.component';
 
 const routes: Routes = [
     {
@@ -13,7 +14,8 @@ const routes: Routes = [
             { path: '', component: ListComponent },
             { path: 'add', component: AddEditComponent },
             { path: 'edit/:id', component: AddEditComponent },
-            { path: 'preferences/:id', component: AddEditPreferComponent}
+            { path: 'preferences/:id', component: AddEditPreferComponent },
+            { path: 'matches/:mbNr', component: MatchesComponent }
         ]
     }
 ];
