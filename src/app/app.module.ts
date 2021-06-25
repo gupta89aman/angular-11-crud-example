@@ -8,6 +8,7 @@ import { ErrorInterceptor } from './_helpers';
 import { AppComponent } from './app.component';
 import { AlertComponent } from './_components';
 import { HomeComponent } from './home';
+import { Globals } from './_services/global.service';
 
 @NgModule({
     imports: [
@@ -23,7 +24,7 @@ import { HomeComponent } from './home';
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-        
+        Globals
         // provider used to create fake backend
         //fakeBackendProvider
     ],

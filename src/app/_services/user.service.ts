@@ -1,20 +1,29 @@
 ﻿import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
 import { environment } from '@environments/environment';
-import { Person, User } from '@app/_models';
+import { Person } from '@app/_models';
 import { Preferences } from '@app/_models/preferences';
 import { PersonData } from '@app/_models/personData';
+import { Observable, ReplaySubject } from 'rxjs';
+import { Globals } from './global.service';
 
 const baseUrl = `${environment.apiUrl}`;
-
+const groom = 'groom';
+const limit : number = 10;
+let users: Person[];
 @Injectable({ providedIn: 'root' })
 export class UserService {
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient, private globals: Globals) { 
+    }
 
+    
     getAll(base: string, page: number = 0) {
-        console.log('page' + page);
-        return this.http.get<PersonData>(`${baseUrl}/${base}?page=${page}`);
+        if(this.canGetFromLocal(base, page)) {
+            return this.getFromLocal<PersonData>(page, base); 
+        }
+        let response = this.http.get<PersonData>(`${baseUrl}/${base}?page=${page}`);
+        this.updateUsers(base, response);
+        return response;
     }
 
     getById(id: string, base:string) {
@@ -22,7 +31,9 @@ export class UserService {
     }
 
     create(params: any, base:string) {
-        return this.http.post(`${baseUrl}/${base}`, params);
+        var personObservable = this.http.post<Person>(`${baseUrl}/${base}`, params);
+        this.updateUser(base, personObservable);
+        return personObservable;
     }
 
     update(id: string, params: any, base: string) {
@@ -42,10 +53,113 @@ export class UserService {
     }
 
     savePreferences(userId: string, prefer: Preferences, base: string) {
+        return this.http.post<Preferences>(`${baseUrl}/${base}/preferences/${userId}`, prefer);
+    }
+
+    updatePreferences(userId: string, prefer: Preferences, base: string) {
         return this.http.put<Preferences>(`${baseUrl}/${base}/preferences/${userId}`, prefer);
     }
 
     getMatches(mobileNr: string, base: string, page: number = 0) {
         return this.http.get<PersonData>(`${baseUrl}/${base}/matches/mobile/${mobileNr}?page=${page}`);
+    }
+
+    private isGroom(base: string) {
+        return base === groom;
+    }
+
+    private canGetFromLocal(base: string, pageNr: number) {
+        if(this.isGroom(base)) {
+            if(this.globals.allGrooms && this.globals.allGrooms.length > 0) {
+                let existingPages = Math.ceil(this.globals.allGrooms.length / limit);
+                if(existingPages >= (pageNr + 1)) {
+                    return true;
+                }
+            }
+        }
+        else {
+            if(this.globals.allBrides && this.globals.allBrides.length > 0) {
+                let existingPages = Math.ceil(this.globals.allBrides.length / limit);
+                if(existingPages >= (pageNr + 1)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private getFromLocal<T>(pageNr: number, base: string) : Observable<PersonData> {
+        let personData = new ReplaySubject<PersonData>();
+        let start = (pageNr) * limit;
+        let end = start + limit;
+        if(this.isGroom(base)){
+           
+            if(end > this.globals.allGrooms.length) {
+                end = this.globals.allGrooms.length;
+            }
+            personData.next({
+                users: this.globals.allGrooms.slice(start, end),
+                total: this.globals.allGrooms.length,
+                count: this.globals.allGrooms.slice(start, end).length
+            });
+        }
+        else {
+            if(end > this.globals.allBrides.length) {
+                end = this.globals.allBrides.length;
+            }
+            personData.next({
+                users: this.globals.allBrides.slice(start, end),
+                total: this.globals.allBrides.length,
+                count: this.globals.allBrides.slice(start, end).length
+            });
+        }
+        return personData;
+    }
+
+    private updateUsers(base: string, subscriber:  Observable<PersonData>) {
+        //subscribing to the observable
+        subscriber
+        .subscribe(persons => {
+            users = persons.users;
+            if(this.isGroom(base)) {
+                if(this.globals.allGrooms && this.globals.allGrooms.length > 0){
+                    this.globals.allGrooms.push(...users);
+                    this.globals.totalGrooms = persons.total;
+                }
+                else {
+                    this.globals.allGrooms = [...users];
+                    this.globals.totalGrooms = persons.total;
+                }
+            }
+            else {
+                if(this.globals.allBrides && this.globals.allBrides.length > 0){
+                    this.globals.allBrides.push(...users);
+                    this.globals.totalBrides = persons.total;
+                }
+                else {
+                    this.globals.allBrides = [...users];
+                    this.globals.totalBrides = persons.total;
+                }
+            }
+        });
+    }
+
+    private updateUser(base: string, subscriber:  Observable<Person>) {
+        let prsn;
+        //subscribing to the observable
+        subscriber
+        .subscribe(person => {
+            prsn = person;
+            if(this.isGroom(base)) {
+                if(this.globals.allGrooms && this.globals.allGrooms.length > 0){
+                    this.globals.allGrooms.push(prsn);
+                }
+            }
+            else {
+                if(this.globals.allBrides && this.globals.allBrides.length > 0){
+                    this.globals.allBrides.push(prsn);
+                }
+            }
+        });
     }
 }

@@ -27,7 +27,8 @@ export interface Person {
     isDeleting: boolean,
     diet: string,
     drink: string,
-    smoking: boolean
+    smoking: boolean,
+    newsPaperDate: string
 }
 
 export enum JobType {

@@ -15,12 +15,15 @@ export class LocationService {
     }
 
     getCities(state: string)  {
-        if(state) {
+        if(state && state !== 'Any') {
             return this.getStates().find(st => st.state == state).cities.sort();
         }
     }
-
     getPreferencesCity(state: string) {
-            return ['Any', ...this.getStates().find(st => st.state == state).cities.sort()];
+        let cities = ['Any'];
+            if(state) {
+                return cities.concat(this.getStates().find(st => st.state == state).cities.sort());
+            }
+            return cities;
     }
 }

@@ -19,7 +19,7 @@ export class MatchesComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router,
         private userService: UserService) {
-            this.router.routeReuseStrategy.shouldReuseRoute = function(){
+            this.router.routeReuseStrategy.shouldReuseRoute = function() {
                 return false;
         }
     }
@@ -50,11 +50,12 @@ export class MatchesComponent implements OnInit {
                 this.count = matches.count;
                 this.page =  Math.ceil(matches.total / 10);
                 this.loopArray = new Array(this.page);
-        });
-    }catch(error){
-        console.log(error);
-        this.persons = Array();
-    }
+            });
+        }
+        catch(error) {
+            console.log(error);
+            this.persons = Array();
+        }
     }
 
     removeMatch(userId : string) {

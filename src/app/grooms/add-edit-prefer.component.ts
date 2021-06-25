@@ -47,22 +47,13 @@ export class AddEditPreferComponent implements OnInit {
         .pipe(map(params => params.get('dob') || 'None'))
         .subscribe(result => this.dob = result);            
         console.log(this.path);
+        
     }
 
     ngOnInit() {
         this.states = this.locationService.getStates();
         this.userId = this.route.snapshot.params['id'];
         this.jobTypes = Object.keys(JobType).filter(k => isNaN(Number(k)));
-        this.userService.getPreferences(this.userId, this.path)
-                        .pipe(first())
-                        .subscribe(prefer => {
-                            this.isAddMode = false;
-                            this.form.patchValue(prefer);
-                            this.getCities('');
-                            this.getJobCities('');
-                            this.preference = prefer;
-                        });
-
         this.form = this.formBuilder.group({
             userId: [this.userId],
             lowerAge: ['', Validators.required],
@@ -72,7 +63,7 @@ export class AddEditPreferComponent implements OnInit {
             jobDesc: [''],
             jobCity: [['']],
             jobState: [['']],
-            lowerIncome: ['300000'],
+            lowerIncome: [''],
             upperIncome: [''],
             lowerHeight: ['60'],
             upperHeight: ['67'],
@@ -80,6 +71,22 @@ export class AddEditPreferComponent implements OnInit {
             statePref: [['']],
             caste: [['']]
             });
+
+        this.userService.getPreferences(this.userId, this.path)
+                        .pipe(first())
+                        .subscribe(prefer => {
+                            console.log('Prefer');
+                            console.log(prefer);
+                            if(prefer) {
+                                this.isAddMode = false;
+                                this.form.patchValue(prefer);
+                                this.getCities('');
+                                this.getJobCities('');
+                                this.preference = prefer;
+                            }
+                        });
+
+        
     }
 
     // convenience getter for easy access to form fields
@@ -98,11 +105,13 @@ export class AddEditPreferComponent implements OnInit {
         }
 
         this.loading = true;
+        console.log(this.isAddMode);
         if (this.isAddMode) {
             this.savePreferences();
         } else {
             this.updatePreferences();
         }
+        this.loading = false;
         this.routeToMainPage();
     }
 
@@ -135,13 +144,15 @@ export class AddEditPreferComponent implements OnInit {
         // prefer.jobState = prefer.jobState || 'any';
         // prefer.jobCity = prefer.jobCity || 'any';
         // prefer.caste = prefer.caste || 'any';
+        console.log('user preferences');
+        console.log(prefer);
         this.userService.savePreferences(this.userId, prefer, this.path)
         .subscribe(pr => console.log(pr));
     }
 
     private updatePreferences() {
         let prefer = this.getUpdatedPreference(this.form.value);
-        this.userService.savePreferences(this.userId, prefer, this.path)
+        this.userService.updatePreferences(this.userId, prefer, this.path)
                         .subscribe(pref => this.preference = pref);
     }
 

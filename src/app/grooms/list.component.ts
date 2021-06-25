@@ -8,6 +8,7 @@ import { UserService } from '@app/_services';
 @Component({ templateUrl: 'list.component.html' })
 export class ListComponent implements OnInit {
     persons!: Person[];
+    allPersons!: Person[];
     path!: string;
     mbNr!:string;
     person!: Person;
@@ -36,11 +37,13 @@ export class ListComponent implements OnInit {
 
     //get all the users based on page number
     getAll(type : any , pageNr: number = 0) {
-        console.log(pageNr);
+        // no need to call api if we click on the current page
+        //but we have disabled the button of current page
+        //still maintaining this code.
         if(this.firstRequest !== true && this.currentPage == pageNr) {
             return;
         }
-        console.log('page');
+
         this.firstRequest = false;
         this.currentPage = pageNr;
         this.userService.getAll(type, pageNr)
@@ -77,7 +80,6 @@ export class ListComponent implements OnInit {
                 this.persons[0] = this.person;
             }
             else {
-                console.log(this.mbNr);
                 this.userService.getByMobileNumber(this.mbNr, this.path)
                 .pipe(first())
                 .subscribe(person => {

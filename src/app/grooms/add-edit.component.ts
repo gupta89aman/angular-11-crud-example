@@ -35,12 +35,10 @@ export class AddEditComponent implements OnInit {
         private alertService: AlertService,
         private locationService: LocationService
     ) {
-        console.log(Date.now());
         this.states = [];
         this.jobCities = this.cities = [];
         this.route.queryParamMap
         .pipe(map(params => params.get('path') || 'None')).subscribe(result => this.path = result);
-        console.log(this.path);
     }
 
     ngOnInit() {
@@ -87,7 +85,8 @@ export class AddEditComponent implements OnInit {
             userId:[''],
             diet: ['veg'],
             drink: ['no'],
-            smoking: ['false']
+            smoking: ['false'],
+            newsPaperDate: ['']
             //password: ['', [Validators.minLength(6), this.isAddMode ? Validators.required : Validators.nullValidator]],
             //confirmPassword: ['', this.isAddMode ? Validators.required : Validators.nullValidator]
         });
@@ -99,7 +98,7 @@ export class AddEditComponent implements OnInit {
                                 let p: Person = this.formatPerson(x); 
                                 this.person = p; 
                                 this.form.patchValue(p);
-                                console.log(p);
+                                console.log(p.time);
                             });
         }
     }
@@ -154,7 +153,6 @@ export class AddEditComponent implements OnInit {
     private createGroom() {
         this.person = this.form.value;
         console.log(this.person);
-        return;
         this.person.manglik = this.person.manglik || false;
         this.person.paid = this.person.paid || false;
         this.person.nativePlace = this.person.nativePlace || this.person.cityOfBirth as string;
