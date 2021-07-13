@@ -15,14 +15,13 @@ let users: Person[];
 export class UserService {
     constructor(private http: HttpClient, private globals: Globals) { 
     }
-
     
     getAll(base: string, page: number = 0) {
-        if(this.canGetFromLocal(base, page)) {
-            return this.getFromLocal<PersonData>(page, base); 
-        }
+        // if(this.canGetFromLocal(base, page)) {
+        //     return this.getFromLocal<PersonData>(page, base); 
+        // }
         let response = this.http.get<PersonData>(`${baseUrl}/${base}?page=${page}`);
-        this.updateUsers(base, response);
+        //this.updateUsers(base, response);
         return response;
     }
 
@@ -32,7 +31,7 @@ export class UserService {
 
     create(params: any, base:string) {
         var personObservable = this.http.post<Person>(`${baseUrl}/${base}`, params);
-        this.updateUser(base, personObservable);
+        //this.updateUser(base, personObservable);
         return personObservable;
     }
 
@@ -64,6 +63,13 @@ export class UserService {
         return this.http.get<PersonData>(`${baseUrl}/${base}/matches/mobile/${mobileNr}?page=${page}`);
     }
 
+    generateMatches(mobileNr: number, base: string) {
+        return this.http.put(`${baseUrl}/${base}/matches/${mobileNr}/find`, null);
+    }
+
+    deleteMatch(userId: string, personId: string, base: string){
+        return this.http.put(`${baseUrl}/${base}/matches/${userId}/remove/${personId}`, null);
+    }
     private isGroom(base: string) {
         return base === groom;
     }
@@ -89,28 +95,31 @@ export class UserService {
     }
 
     private getFromLocal<T>(pageNr: number, base: string) : Observable<PersonData> {
+        console.log('getting from local:' + pageNr);
         let personData = new ReplaySubject<PersonData>();
         let start = (pageNr) * limit;
         let end = start + limit;
         if(this.isGroom(base)){
-           
             if(end > this.globals.allGrooms.length) {
                 end = this.globals.allGrooms.length;
+                console.log('end:' + end);
             }
+            let grooms = [...this.globals.allGrooms.slice(start, end)];
             personData.next({
-                users: this.globals.allGrooms.slice(start, end),
+                users: grooms,
                 total: this.globals.allGrooms.length,
-                count: this.globals.allGrooms.slice(start, end).length
+                count: grooms.length
             });
         }
         else {
             if(end > this.globals.allBrides.length) {
                 end = this.globals.allBrides.length;
             }
+            let brides = [...this.globals.allBrides.slice(start, end)];
             personData.next({
-                users: this.globals.allBrides.slice(start, end),
+                users: brides,
                 total: this.globals.allBrides.length,
-                count: this.globals.allBrides.slice(start, end).length
+                count: brides.length
             });
         }
         return personData;
@@ -120,7 +129,7 @@ export class UserService {
         //subscribing to the observable
         subscriber
         .subscribe(persons => {
-            users = persons.users;
+            users = [...persons.users];
             if(this.isGroom(base)) {
                 if(this.globals.allGrooms && this.globals.allGrooms.length > 0){
                     this.globals.allGrooms.push(...users);

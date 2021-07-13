@@ -16,7 +16,7 @@ export interface Person {
     email: string,
     caste: Caste,
     manglik: boolean,
-     mrgStatus: MrgStatus,
+    mrgStatus: MrgStatus,
     paid: boolean,
     religion: string,
     source: Source,
@@ -28,7 +28,9 @@ export interface Person {
     diet: string,
     drink: string,
     smoking: boolean,
-    newsPaperDate: string
+    newsPaperDate: string,
+    score: string,
+    _id: string
 }
 
 export enum JobType {

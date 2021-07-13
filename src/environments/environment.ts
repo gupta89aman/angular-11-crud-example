@@ -4,7 +4,9 @@
 
 export const environment = {
     production: false,
-    apiUrl: 'http://localhost:5000'
+    apiUrl: 'http://localhost:5000',
+    kundliUrl: 'http://localhost:4630/kundli',
+    whatsAppURL: 'http://localhost:4632/text'
 };
 
 /*

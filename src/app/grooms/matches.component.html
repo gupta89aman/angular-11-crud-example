@@ -1,5 +1,11 @@
 <h3>{{path.substring(0,1).toLocaleUpperCase() + path.substring(1)}} Matches</h3>
-    <a routerLink="add" [queryParams]="{ path: path }" class="btn btn-sm btn-success mb-2">Add </a>
+<button class="btn btn-sm btn-success" (click)="generateKundli()">Generate Kundli</button>
+<div style="float: right;">
+<input class="ml-4 align-middle"  type="text" [(ngModel)]="usrMbNr" placeholder="Enter new mobile nr.." />
+<button class="p-1" style="margin-left: 20px;" class="btn btn-sm btn-success" (click)="sendMessage()">Send Matches</button>
+</div>
+
+<p></p>
     <table class="table table-striped table-bordered">
         <thead>
             <tr>
@@ -7,11 +13,14 @@
                 <th style="width: 10%">Dob</th>
                 <th style="width: 5%">Time</th>
                 <th style="width: 10%">City/State</th>
-                <th>Job</th>
+                <th>Native Place</th> 
+                <th style="width: 10%;">Qualific ation</th>
+                <th style="width: 5%">Job</th>
                 <th style="width: 5%">Income</th>
                 <th style="width: 5%">Caste</th>
                 <th style="width: 10%">Job City</th>
-                <th style="width: 15%">Email</th>
+                <th style="width: 5%">Manglik</th>
+                <th style="width: 5%;">Score</th>
                 <th style="width: 5%;"></th>
             </tr>
         </thead>
@@ -21,17 +30,23 @@
                 <td>{{user.dob}}</td>
                 <td>{{user.time}}</td>
                 <td>{{user.cityOfBirth}}/{{user.stateOfBirth}}</td>
-                <td>{{user.jobDesc}}</td>
+                <td>{{user.nativePlace }}</td>
+                <td>{{user.qualification}}</td>
+                <td>{{user.jobType}} - {{user.jobDesc}}</td>
                 <td>{{user.income}}</td>
                 <td>{{user.caste}}</td>
                 <td>{{user.jobCity}}</td>
-                <td>{{user.email}}</td>
+                <td>{{user.manglik === true ? 'yes' : 'no'}}</td>
+                <td>{{user.score}}</td>
                 <td style="white-space: nowrap">
-                    <button (click)="removeMatch(user.userId)" class="btn btn-sm btn-danger" [disabled]="user.isDeleting">
+                    <button (click)="removeMatch(user._id)" class="btn btn-sm btn-danger" [disabled]="user.isDeleting">
                         <span *ngIf="user.isDeleting" class="spinner-border spinner-border-sm"></span>
                         <span *ngIf="!user.isDeleting">Remove</span>
                     </button>
                     &nbsp;
+                    <button (click)="sendMatch(user.userId)" class="btn btn-sm btn-success">
+                        <span >Send</span>
+                    </button>
                 </td>
             </tr>
             <tr *ngIf="!persons">
@@ -40,9 +55,9 @@
                 </td>
             </tr>
             <tr *ngIf="persons" style="column-span: all;">
-                <td style="align-content: center; text-align: center;" colspan="9">
+                <td style="align-content: center; text-align: center;" colspan="11">
                     <span class="mr-1" *ngFor="let loop of loopArray; let indexEle = index">
-                        <button class="btn btn-sm btn-success" (click)="getMatches(path, mbNr, indexEle )">{{ indexEle + 1}}</button>
+                        <button class="btn btn-sm btn-success" [disabled]="currentPage == indexEle" (click)="getMatches(path, mbNr, indexEle )">{{ indexEle + 1}}</button>
                     </span>
                 </td>
             </tr>

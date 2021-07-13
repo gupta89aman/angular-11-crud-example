@@ -42,6 +42,11 @@ export class AddEditComponent implements OnInit {
     }
 
     ngOnInit() {
+        let income = '' ;
+        if(this.path === 'groom') {
+            income = '0'
+        }
+
         this.states = this.locationService.getStates();
         this.id = this.route.snapshot.params['id'];
         this.isAddMode = !this.id;
@@ -61,7 +66,7 @@ export class AddEditComponent implements OnInit {
             dob: ['', Validators.required],
             name: [''],
             time: ['', Validators.required],
-            cityOfBirth: ['', [Validators.required, RxwebValidators.alpha()]],
+            cityOfBirth: ['', [Validators.required]],
             stateOfBirth: ['', [Validators.required, RxwebValidators.alpha()]],
             nativePlace: [''],
             qualification: ['', Validators.required],
@@ -69,14 +74,14 @@ export class AddEditComponent implements OnInit {
             jobDesc: [''],
             jobCity: [''],
             jobState: [''],
-            income: [''],
+            income: [income],
             waNr: ['', [Validators.required, RxwebValidators.digit(), RxwebValidators.maxLength({ value:10 })]],
             altNr: [''],
             email: [''],
             caste: [''],
-            manglik: [''],
+            manglik: ['No'],
             mrgStatus: [''],
-            paid: [''],
+            paid: ['No'],
             religion: [''],
             source: [''],
             sourceId: [''],
@@ -84,9 +89,9 @@ export class AddEditComponent implements OnInit {
             address: [''],
             userId:[''],
             diet: ['veg'],
-            drink: ['no'],
+            drink: ['No'],
             smoking: ['false'],
-            newsPaperDate: ['']
+            newsPaperDate: ['2021-04-25']
             //password: ['', [Validators.minLength(6), this.isAddMode ? Validators.required : Validators.nullValidator]],
             //confirmPassword: ['', this.isAddMode ? Validators.required : Validators.nullValidator]
         });
@@ -97,8 +102,8 @@ export class AddEditComponent implements OnInit {
                 .subscribe(x => { 
                                 let p: Person = this.formatPerson(x); 
                                 this.person = p; 
-                                this.form.patchValue(p);
-                                console.log(p.time);
+                                this.form.patchValue({...p, paid : p.paid ? 'yes' : 'no', manglik: p.manglik ? 'yes' : 'no'});
+                                console.log(p.newsPaperDate);
                             });
         }
     }
@@ -110,7 +115,6 @@ export class AddEditComponent implements OnInit {
         this.getBirthCities(per.stateOfBirth);
         this.getJobCities(p.jobState);
         //p.jobCity = p.jobCity.charAt(0).toUpperCase() + p.jobCity.substring(1);
-
         return p;
     }
 
@@ -152,9 +156,10 @@ export class AddEditComponent implements OnInit {
 
     private createGroom() {
         this.person = this.form.value;
+        console.log(this.form.get('manglik')?.value);
         console.log(this.person);
-        this.person.manglik = this.person.manglik || false;
-        this.person.paid = this.person.paid || false;
+        this.person.manglik = this.form.get('manglik')?.value === 'yes' || this.form.get('manglik')?.value === 'true' ? true : false;
+        this.person.paid = this.form.get('paid')?.value === 'yes' || this.form.get('paid')?.value === 'true' ? true : false;
         this.person.nativePlace = this.person.nativePlace || this.person.cityOfBirth as string;
         this.person.jobDesc = this.person.jobDesc || this.person.jobType.toString();
         console.log(this.person.jobType.toString());
@@ -162,8 +167,11 @@ export class AddEditComponent implements OnInit {
         this.person.mrgStatus = this.person.mrgStatus || MrgStatus.Single;
         this.person.source = this.person.source || Source.Newspaper;
         this.person.caste = this.person.caste || Caste.Aggarwal;
-        this.person.jobState = this.person.jobState || this.person.stateOfBirth as string;
-        this.person.jobCity = this.person.jobCity || this.person.cityOfBirth as string;
+        if(this.path === 'groom') {
+            this.person.jobState = this.person.jobState || this.person.stateOfBirth as string;
+            this.person.jobCity = this.person.jobCity || this.person.cityOfBirth as string;
+        }
+       
         this.userService.create(this.person, this.path)
         .subscribe(() => {
             this.alertService.success(`${this.path} added`, {keepAfterRouteChange: true});
@@ -173,9 +181,12 @@ export class AddEditComponent implements OnInit {
     }
 
     private updateUser() {
+        
         let prsn = this.getUpdatedPerson(this.form.value);
         prsn.userId = this.id;
+        prsn.manglik = this.form.get('manglik')?.value === 'yes' || this.form.get('manglik')?.value === 'true' ? true : false;
         console.log(prsn);
+
         this.userService.update(this.id, prsn, this.path)
             .pipe(first())
             .subscribe(() => {

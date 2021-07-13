@@ -69,6 +69,10 @@ export class ListComponent implements OnInit {
             .subscribe(() => this.persons = this.persons.filter(x => x.userId !== id));
     }
 
+    generateMatches(waNr: string) {
+        this.userService.generateMatches(+waNr, this.path)
+        .subscribe();
+    }
 
     //method to search particular person based on mobile number
     onSubmit() {
