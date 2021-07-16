@@ -14,12 +14,13 @@
                 <th style="width: 5%">Time</th>
                 <th style="width: 10%">City/State</th>
                 <th>Native Place</th> 
-                <th style="width: 10%;">Qualific ation</th>
+                <th>Height</th>
+                <th style="width: 10%;">Qualifi cation</th>
                 <th style="width: 5%">Job</th>
                 <th style="width: 5%">Income</th>
                 <th style="width: 5%">Caste</th>
                 <th style="width: 10%">Job City</th>
-                <th style="width: 5%">Manglik</th>
+                <th style="width: 5%">Mang lik</th>
                 <th style="width: 5%;">Score</th>
                 <th style="width: 5%;"></th>
             </tr>
@@ -29,8 +30,9 @@
                 <td><a routerLink="edit/{{user.userId}}" [queryParams]="{ path: path}" class="mr-1">{{user.waNr}}</a></td>
                 <td>{{user.dob}}</td>
                 <td>{{user.time}}</td>
-                <td>{{user.cityOfBirth}}/{{user.stateOfBirth}}</td>
+                <td>{{user.cityOfBirth}} / {{user.stateOfBirth}}</td>
                 <td>{{user.nativePlace }}</td>
+                <td>{{ getHeight(user.height) }} ft</td>
                 <td>{{user.qualification}}</td>
                 <td>{{user.jobType}} - {{user.jobDesc}}</td>
                 <td>{{user.income}}</td>
@@ -55,7 +57,7 @@
                 </td>
             </tr>
             <tr *ngIf="persons" style="column-span: all;">
-                <td style="align-content: center; text-align: center;" colspan="11">
+                <td style="align-content: center; text-align: center;" colspan="14">
                     <span class="mr-1" *ngFor="let loop of loopArray; let indexEle = index">
                         <button class="btn btn-sm btn-success" [disabled]="currentPage == indexEle" (click)="getMatches(path, mbNr, indexEle )">{{ indexEle + 1}}</button>
                     </span>

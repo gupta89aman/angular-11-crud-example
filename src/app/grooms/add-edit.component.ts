@@ -102,7 +102,10 @@ export class AddEditComponent implements OnInit {
                 .subscribe(x => { 
                                 let p: Person = this.formatPerson(x); 
                                 this.person = p; 
-                                this.form.patchValue({...p, paid : p.paid ? 'yes' : 'no', manglik: p.manglik ? 'yes' : 'no'});
+                                this.form.patchValue({...p, 
+                                        paid : p.paid ? 'yes' : 'no', 
+                                        manglik: p.manglik ? 'yes' : 'no',
+                                        qualification: p.qualification.filter(qua => qua.split(',')).join(',')});
                                 console.log(p.newsPaperDate);
                             });
         }
@@ -167,6 +170,7 @@ export class AddEditComponent implements OnInit {
         this.person.mrgStatus = this.person.mrgStatus || MrgStatus.Single;
         this.person.source = this.person.source || Source.Newspaper;
         this.person.caste = this.person.caste || Caste.Aggarwal;
+        this.person.qualification = this.form.get('qualification')?.value.split(',');
         if(this.path === 'groom') {
             this.person.jobState = this.person.jobState || this.person.stateOfBirth as string;
             this.person.jobCity = this.person.jobCity || this.person.cityOfBirth as string;
@@ -208,6 +212,9 @@ export class AddEditComponent implements OnInit {
                 console.log('called here' + per[k]);
                 prsn[k] = per[k];
             }
+        }
+        if(prsn.qualification){
+            prsn.qualification = prsn.qualification.split(',');
         }
         return prsn;
     } 

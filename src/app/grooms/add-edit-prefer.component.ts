@@ -79,7 +79,9 @@ export class AddEditPreferComponent implements OnInit {
                             console.log(prefer);
                             if(prefer) {
                                 this.isAddMode = false;
-                                this.form.patchValue(prefer);
+                                this.form.patchValue({...prefer,
+                                    qualification: prefer.qualification.filter(qua => qua.split(',')).join(',')});
+                                //this.form.patchValue(prefer);
                                 this.getCities('');
                                 this.getJobCities('');
                                 this.preference = prefer;

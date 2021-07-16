@@ -1,3 +1,4 @@
+import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Person } from '@app/_models';
@@ -113,12 +114,7 @@ export class MatchesComponent implements OnInit {
 
         let message = '';
         for(let j = 0; j< this.persons.length; j++){
-            message += ' Dob: ' + this.persons[j].dob;
-            message += '\n Time: ' + this.persons[j].time;
-            message += '\n Place:' + this.persons[j].cityOfBirth + '/' + this.persons[j].stateOfBirth;
-            message += '\n Occupation:' + this.persons[j].jobType;
-            message += '\n Kundli Score:' + this.persons[j].score;
-            message += '\n Mobile Nr:' + this.persons[j].waNr;
+            message += (+j + 1) + this.generateMessage(this.persons[j]);
             message += '\n ===================\n';
         }
         this.mbNr = this.usrMbNr || this.mbNr;
@@ -132,32 +128,47 @@ export class MatchesComponent implements OnInit {
         }   
         let user = this.persons.find(prsn => prsn.userId === userId);
         console.log(user);
-        if(user) {
-            let message = ' Dob: ' + user.dob;
-            message += '\n Time: ' + user.time;
-            message += '\n Place:' + user.cityOfBirth + '/' + user.stateOfBirth;
-            message += '\n Home Town:' + user.nativePlace;
-            if(user.qualification && user.qualification !== 'BB') {
-                message += '\n Qualification:' + user.qualification;
-            }
-            message += '\n Occupation:' + user.jobType;
-            if(user.jobState) {
-                message += '\n Job Location:' + user.jobCity + '/' + user.jobState 
-            }
-            if(user.income) {
-                message += '\n Package: ' + user.income;
-            }
-            message += '\n Kundli Score:' + user.score;
-            message += '\n Mobile Nr:' + user.waNr;
-            this.mbNr = this.usrMbNr || this.mbNr;
-            this.sendWhatsAppMessage(this.mbNr, message);
-        }
+        let message = this.generateMessage(user);
+        this.mbNr = this.usrMbNr || this.mbNr;
+        this.sendWhatsAppMessage(this.mbNr, message);
+    }
+    
+    getHeight(height: number) {
+        return Math.round((height/12) * 10) / 10
     }
 
-    
     private sendWhatsAppMessage(mbNr: string, message: string ){
             console.log(message);
             this.whatsAppService.sendMessage('9560170800', message)
             .subscribe();
+    }
+
+    private generateMessage(user: any): string{
+        let message: string = '';
+        if(user) {
+            message = '  *Dob*: ' + user.dob;
+            message += '\n *Time*: ' + user.time;
+            message += '\n *Place*: ' + user.cityOfBirth + '/' + user.stateOfBirth;
+            message += '\n *Home Town*: ' + user.nativePlace;
+            message += '\n *Height*: ' + this.getHeight(user.height) + ' ft';
+            if(user.qualification && user.qualification != 'BB') {
+                message += '\n *Qualification*: ' + user.qualification;
+            }
+            if(user.jobDesc) {
+                message += '\n *Occupation*: ' + user.jobDesc;
+            }
+            if(!user.jobDesc && !user.jobType){
+                message += '\n *Occupation*: ' + user.jobType;
+            }
+            if(user.jobState) {
+                message += '\n *Job Location*: ' + user.jobCity + '/' + user.jobState 
+            }
+            if(user.income) {
+                message += '\n *Package*: ' + user.income;
+            }
+            message += '\n *Kundli Score*: ' + user.score;
+            message += '\n *Mobile Nr*: ' + user.waNr;
+        }
+        return message;
     }
 }

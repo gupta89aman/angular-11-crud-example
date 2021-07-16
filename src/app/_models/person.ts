@@ -5,7 +5,7 @@ export interface Person {
     cityOfBirth: string,
     stateOfBirth: string,
     nativePlace: string,
-    qualification: string,
+    qualification: string[],
     jobType: JobType,
     jobDesc: string,
     jobCity: string,
