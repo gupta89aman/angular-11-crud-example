@@ -30,7 +30,8 @@ export interface Person {
     smoking: boolean,
     newsPaperDate: string,
     score: string,
-    _id: string
+    _id: string,
+    sent: boolean
 }
 
 export enum JobType {

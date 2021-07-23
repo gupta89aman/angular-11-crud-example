@@ -95,17 +95,22 @@ export class MatchesComponent implements OnInit {
        
     }
 
-    generateKundli() {
+    generateKundli(secUserId: string = '') {
         if(!this.userId)
         {
             return;
         }
 
-        this.kundliService.generateKundli(this.path, this.userId)
-        .subscribe();
+        this.kundliService.generateKundli(this.path, this.userId, secUserId)
+        .subscribe(msg => {
+            this.alertService.info(msg.message);
+            if(Number.isNaN(msg.message)) {
+                this.alertService.info('Not a number');
+            }
+        });
     }
 
-    sendMessage(){
+    sendAll(){
         console.log(this.usrMbNr);
         if(!this.usrMbNr || !this.currentUser.paid){
             this.alertService.info('You are not a paid customer. Paid: - ' + this.currentUser.paid)
@@ -117,20 +122,29 @@ export class MatchesComponent implements OnInit {
             message += (+j + 1) + this.generateMessage(this.persons[j]);
             message += '\n ===================\n';
         }
-        this.mbNr = this.usrMbNr || this.mbNr;
-        this.sendWhatsAppMessage(this.mbNr, message);
+        this.usrMbNr = this.usrMbNr || this.mbNr;
+        this.sendWhatsAppMessage(this.usrMbNr, message)
+        .subscribe();
     }
 
+    //userId of bride in case of groom matches and vice versa
     sendMatch(userId: string) {
-        if(!this.usrMbNr || !this.currentUser.paid){
+        if(!this.usrMbNr && !this.currentUser.paid){
             this.alertService.info('You are not a paid customer. Paid: - ' + this.currentUser.paid)
             return;
         }   
-        let user = this.persons.find(prsn => prsn.userId === userId);
-        console.log(user);
-        let message = this.generateMessage(user);
-        this.mbNr = this.usrMbNr || this.mbNr;
-        this.sendWhatsAppMessage(this.mbNr, message);
+
+        let user = this.persons.find(prsn => prsn.userId === userId) ?? this.persons[0];
+        if(user !== undefined) {
+            console.log(user);
+            let message = this.generateMessage(user);
+            this.usrMbNr = this.usrMbNr || this.mbNr;
+            this.sendWhatsAppMessage(this.usrMbNr, message)
+            .subscribe(resp => {
+                this.userService.updateSentMatch(this.userId, user._id, this.path)
+                .subscribe(msg => this.alertService.info(msg));
+            });
+        }
     }
     
     getHeight(height: number) {
@@ -139,11 +153,10 @@ export class MatchesComponent implements OnInit {
 
     private sendWhatsAppMessage(mbNr: string, message: string ){
             console.log(message);
-            this.whatsAppService.sendMessage('9560170800', message)
-            .subscribe();
+            return this.whatsAppService.sendMessage('9560170800', message);
     }
 
-    private generateMessage(user: any): string{
+    private generateMessage(user: Person): string{
         let message: string = '';
         if(user) {
             message = '  *Dob*: ' + user.dob;
@@ -151,7 +164,7 @@ export class MatchesComponent implements OnInit {
             message += '\n *Place*: ' + user.cityOfBirth + '/' + user.stateOfBirth;
             message += '\n *Home Town*: ' + user.nativePlace;
             message += '\n *Height*: ' + this.getHeight(user.height) + ' ft';
-            if(user.qualification && user.qualification != 'BB') {
+            if(user.qualification && user.qualification.findIndex(qual => qual === 'BB') < 0) {
                 message += '\n *Qualification*: ' + user.qualification;
             }
             if(user.jobDesc) {

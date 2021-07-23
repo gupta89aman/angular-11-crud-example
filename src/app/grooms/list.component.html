@@ -58,7 +58,7 @@
             </td>
         </tr>
         <tr *ngIf="persons" style="column-span: all;">
-            <td style="align-content: center; text-align: center;" colspan="11">
+            <td style="align-content: center; text-align: center;" colspan="12">
                 <span class="mr-1" *ngFor="let loop of loopArray; let indexEle = index">
                     <button class="btn btn-sm btn-success" [disabled]="currentPage == indexEle" (click)="getAll(path, indexEle )">{{ indexEle + 1}}</button>
                 </span>

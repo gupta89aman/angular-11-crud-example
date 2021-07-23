@@ -9,7 +9,13 @@ export class KundliService {
     constructor(private http: HttpClient) { 
     }
 
-    generateKundli(base: string, userId: string) {
-        return this.http.put(`${baseUrl}/${base}/${userId}`, null);
+    generateKundli(base: string, userId: string, secUserId: string = '') {
+        let url = `${baseUrl}/${base}/${userId}`;
+        if(secUserId !== '') {
+            url += `?secUserId=${secUserId}`;
+        }
+        return this.http.put<any>(url , null);
     }
+    
+    
 }

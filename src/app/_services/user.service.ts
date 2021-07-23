@@ -70,6 +70,11 @@ export class UserService {
     deleteMatch(userId: string, personId: string, base: string){
         return this.http.put(`${baseUrl}/${base}/matches/${userId}/remove/${personId}`, null);
     }
+
+    updateSentMatch(userId: string, brideId: string, base: string) {
+        return this.http.put<string>(`${baseUrl}/${base}/matches/sent/${brideId}/to/${userId}`, null);
+    }
+
     private isGroom(base: string) {
         return base === groom;
     }

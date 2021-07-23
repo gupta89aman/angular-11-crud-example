@@ -91,7 +91,7 @@ export class AddEditComponent implements OnInit {
             diet: ['veg'],
             drink: ['No'],
             smoking: ['false'],
-            newsPaperDate: ['2021-04-25']
+            newsPaperDate: ['2021-04-11']
             //password: ['', [Validators.minLength(6), this.isAddMode ? Validators.required : Validators.nullValidator]],
             //confirmPassword: ['', this.isAddMode ? Validators.required : Validators.nullValidator]
         });

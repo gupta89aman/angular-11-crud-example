@@ -2,7 +2,7 @@
 <button class="btn btn-sm btn-success" (click)="generateKundli()">Generate Kundli</button>
 <div style="float: right;">
 <input class="ml-4 align-middle"  type="text" [(ngModel)]="usrMbNr" placeholder="Enter new mobile nr.." />
-<button class="p-1" style="margin-left: 20px;" class="btn btn-sm btn-success" (click)="sendMessage()">Send Matches</button>
+<button class="p-1" style="margin-left: 20px;" class="btn btn-sm btn-success" (click)="sendAll()">Send Matches</button>
 </div>
 
 <p></p>
@@ -48,6 +48,10 @@
                     &nbsp;
                     <button (click)="sendMatch(user.userId)" class="btn btn-sm btn-success">
                         <span >Send</span>
+                    </button>
+                    &nbsp;
+                    <button (click)="generateKundli(user.userId)" class="btn btn-sm btn-success">
+                        <span >Match</span>
                     </button>
                 </td>
             </tr>

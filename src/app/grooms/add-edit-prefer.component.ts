@@ -81,7 +81,6 @@ export class AddEditPreferComponent implements OnInit {
                                 this.isAddMode = false;
                                 this.form.patchValue({...prefer,
                                     qualification: prefer.qualification.filter(qua => qua.split(',')).join(',')});
-                                //this.form.patchValue(prefer);
                                 this.getCities('');
                                 this.getJobCities('');
                                 this.preference = prefer;
@@ -146,6 +145,9 @@ export class AddEditPreferComponent implements OnInit {
         // prefer.jobState = prefer.jobState || 'any';
         // prefer.jobCity = prefer.jobCity || 'any';
         // prefer.caste = prefer.caste || 'any';
+        if(prefer.qualification){
+            prefer.qualification = prefer.qualification.split(',');
+        }
         console.log('user preferences');
         console.log(prefer);
         this.userService.savePreferences(this.userId, prefer, this.path)
@@ -166,6 +168,9 @@ export class AddEditPreferComponent implements OnInit {
                 console.log('called here' + per[k]);
                 prefer[k] = per[k];
             }
+        }
+        if(prefer.qualification) {
+            prefer.qualification = prefer.qualification.split(',');
         }
         return prefer;
     } 
