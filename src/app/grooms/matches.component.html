@@ -26,8 +26,9 @@
             </tr>
         </thead>
         <tbody style="font-size: small;">
-            <tr *ngFor="let user of persons">
-                <td><a routerLink="edit/{{user.userId}}" [queryParams]="{ path: path}" class="mr-1">{{user.waNr}}</a></td>
+            <tr *ngFor="let user of persons" 
+            [ngStyle]="{'background-color' : user.sent === true ? '#e7e7e7' : 'white' }">
+                <td><a routerLink="/users/edit/{{user.userId}}" [queryParams]="{ path: oppositePath}" class="mr-1">{{user.waNr}}</a></td>
                 <td>{{user.dob}}</td>
                 <td>{{user.time}}</td>
                 <td>{{user.cityOfBirth}} / {{user.stateOfBirth}}</td>
@@ -46,11 +47,11 @@
                         <span *ngIf="!user.isDeleting">Remove</span>
                     </button>
                     &nbsp;
-                    <button (click)="sendMatch(user.userId)" class="btn btn-sm btn-success">
+                    <button [disabled]="user.sent === true" (click)="sendMatch(user.userId)" class="btn btn-sm btn-success">
                         <span >Send</span>
                     </button>
                     &nbsp;
-                    <button (click)="generateKundli(user.userId)" class="btn btn-sm btn-success">
+                    <button [disabled]="user.score" (click)="generateKundli(user.userId)" class="btn btn-sm btn-success">
                         <span >Match</span>
                     </button>
                 </td>

@@ -17,6 +17,7 @@
             <th style="width: 10%;">DateOfBi rth</th>
             <th style="width: 10%;">Time</th>
             <th style="width: 10%;">City/ State</th>
+            <th>Height</th>
             <th style="width: 10%;">Job</th>
             <th style="width: 10%;">Native Place</th>
             <th style="width: 10%;">Income</th>
@@ -33,6 +34,7 @@
             <td>{{user.dob}}</td>
             <td>{{user.time}}</td>
             <td>{{user.cityOfBirth}}/ {{user.stateOfBirth}}</td>
+            <td>{{ getHeight(user.height) }} ft</td>
             <td>{{user.jobType}}/ {{user.jobDesc}}</td>
             <td>{{user.nativePlace }}</td>
             <td>{{user.income}}</td>

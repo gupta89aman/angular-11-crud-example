@@ -72,7 +72,7 @@ export class UserService {
     }
 
     updateSentMatch(userId: string, brideId: string, base: string) {
-        return this.http.put<string>(`${baseUrl}/${base}/matches/sent/${brideId}/to/${userId}`, null);
+        return this.http.put<any>(`${baseUrl}/${base}/matches/sent/${brideId}/to/${userId}`, null);
     }
 
     private isGroom(base: string) {

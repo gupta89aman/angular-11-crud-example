@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 export class LocationService {
 
     getStates() : Array<any> {
-        return [{ state: 'Punjab', cities: ["Amritsar", "Ludhiana", "Jalandhar", "Patiala", "Bathinda", "Hoshiarpur", "Mohali", "Batala", "Pathankot", "Moga", "Abohar", "Malerkotla", "Khanna", "Phagwara", "Muktsar", "Barnala", "Rajpura", "Firozpur", "Kapurthala", "Faridkot", "Sunam", "Mansa", "Sangrur", "Tapa", "Jagraon", "Gurdaspur", "Dhuri", "Kotakpura", "Sirhind", "Nabha", "Mandi Gobindgarh", "Samana", "Kurali", "Devigarh" ]}, 
+        return [{ state: 'Punjab', cities: ["Amritsar", "Ludhiana", "Jalandhar", "Patiala", "Bathinda", "Hoshiarpur", "Mohali", "Batala", "Pathankot", "Moga", "Abohar", "Malerkotla", "Khanna", "Phagwara", "Muktsar", "Barnala", "Rajpura", "Firozpur", "Kapurthala", "Faridkot", "Sunam", "Mansa", "Sangrur", "Tapa", "Jagraon", "Gurdaspur", "Dhuri", "Kotakpura", "Sirhind", "Nabha", "Mandi Gobindgarh", "Samana", "Kurali", "Devigarh","Mukerian", "Kharar" ]}, 
                 {state: 'Haryana', cities: ["Faridabad", "Gurugram", "Panipat", "Ambala", "Yamunanagar", "Rohtak", "Hisar", "Karnal", "	Sonipat", "Panchkula", "Bhiwani", "Sirsa", "Bahadurgarh", "Jind", "Thanesar", "Kaithal", "Rewari", "Mahendergarh", "Pundri", "Kosli", "Kurukshetra", "Cheeka", "Jagadhri", "Ambala Cantt", "Tohana"]},
                 {state: 'Maharashtra', cities: ['Pune','Mumbai','Nagpur']},
                 {state: 'Karnatka', cities: ['Bangalore']},
@@ -14,7 +14,8 @@ export class LocationService {
                 {state: 'UP', cities: ['Noida', 'Gaziabad']},
                 {state: 'Netherland', cities: ['Netherland']},
                 {state: 'Germany', cities: ['Germany']},
-                {state: 'Telangana', cities: ['Hyderabad']}
+                {state: 'Telangana', cities: ['Hyderabad']},
+                {state: 'Canada', cities: ['Canada']}
             ];
     }
 

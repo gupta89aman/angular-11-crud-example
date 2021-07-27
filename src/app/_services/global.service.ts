@@ -7,4 +7,5 @@ export class Globals {
     totalGrooms!: number;
     allBrides!: Person[];
     totalBrides!:number;
+
 }

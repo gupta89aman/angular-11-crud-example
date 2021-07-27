@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Person } from '@app/_models';
 import { map } from 'rxjs/operators';
 import { UserService } from '@app/_services';
+import { LIMIT } from '../_helpers/globals';
 
 @Component({ templateUrl: 'list.component.html' })
 export class ListComponent implements OnInit {
@@ -51,7 +52,7 @@ export class ListComponent implements OnInit {
             .subscribe(persons => {
                 this.persons = persons.users;
                 this.count = persons.count;
-                this.page =  Math.ceil(persons.total / 10);
+                this.page =  Math.ceil(persons.total / LIMIT);
                 //used for paging purpose,stores page numbers to show on front html view
                 this.loopArray = new Array(this.page);
             });
@@ -93,5 +94,11 @@ export class ListComponent implements OnInit {
                 });
             }
         }
+    }
+
+    getHeight(height: number) {
+        let feet = Math.floor(height / 12);
+        let inches = height - (feet * 12);
+        return feet + '.' + inches;
     }
 }

@@ -12,6 +12,6 @@ export class WhatsAppService {
 
     sendMessage(mbNr: string, message: string){
         let sentMessage = { message: message}
-        return this.http.post(`${baseUrl}/${mbNr}`, sentMessage);
+        return this.http.post<any>(`${baseUrl}/${mbNr}`, sentMessage);
     }
 }

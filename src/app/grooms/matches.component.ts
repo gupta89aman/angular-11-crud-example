@@ -6,6 +6,7 @@ import { AlertService, UserService } from '@app/_services';
 import { KundliService } from '@app/_services/kundli.service';
 import { WhatsAppService } from '@app/_services/whatsapp.service';
 import { map } from 'rxjs/operators';
+import { LIMIT } from '../_helpers/globals';
 
 @Component({ templateUrl : 'matches.component.html'})
 export class MatchesComponent implements OnInit {
@@ -21,6 +22,7 @@ export class MatchesComponent implements OnInit {
     userId!: string;
     currentUser!:Person;
     usrMbNr!: string;
+    oppositePath!: string;
     constructor (
         private route: ActivatedRoute,
         private router: Router,
@@ -41,7 +43,7 @@ export class MatchesComponent implements OnInit {
         this.route.queryParamMap
         .pipe(map(params => params.get('userId') || 'None'))
         .subscribe(result => this.userId = result);
-
+        this.oppositePath = this.path == 'groom' ? 'bride' : 'groom';
         this.mbNr = this.route.snapshot.params['mbNr'];
         this.firstRequest = true;
         this.currentPage = 0;
@@ -70,7 +72,7 @@ export class MatchesComponent implements OnInit {
                 console.log(matches.users);
                 this.persons = matches.users;
                 this.count = matches.count;
-                this.page =  Math.ceil(matches.total / 10);
+                this.page =  Math.ceil(matches.total / LIMIT);
                 this.loopArray = new Array(this.page);
             });
         }
@@ -103,9 +105,23 @@ export class MatchesComponent implements OnInit {
 
         this.kundliService.generateKundli(this.path, this.userId, secUserId)
         .subscribe(msg => {
-            this.alertService.info(msg.message);
-            if(Number.isNaN(msg.message)) {
+            this.alertService.info(msg.score);
+            if(Number.isNaN(msg.score)) {
                 this.alertService.info('Not a number');
+            }
+            else if(msg.score > 17) {
+                let index = this.persons.findIndex(prsn => prsn.userId == secUserId);
+                console.log(index);
+                if(index > -1) {
+                    this.persons[index].score = msg.score;
+                }
+            }
+            else {
+                let index = this.persons.findIndex(prsn => prsn.userId == secUserId);
+                console.log(index);
+                if(index > -1) {
+                    this.persons.splice(index, 1);
+                }
             }
         });
     }
@@ -134,15 +150,26 @@ export class MatchesComponent implements OnInit {
             return;
         }   
 
-        let user = this.persons.find(prsn => prsn.userId === userId) ?? this.persons[0];
+        let userIndex = this.persons.findIndex(prsn => prsn.userId === userId);
+        let user = this.persons[userIndex];
         if(user !== undefined) {
             console.log(user);
             let message = this.generateMessage(user);
             this.usrMbNr = this.usrMbNr || this.mbNr;
             this.sendWhatsAppMessage(this.usrMbNr, message)
             .subscribe(resp => {
-                this.userService.updateSentMatch(this.userId, user._id, this.path)
-                .subscribe(msg => this.alertService.info(msg));
+                console.log(resp);
+                if(resp && resp.message === 0) {
+                    this.persons[userIndex].sent = true;
+                    console.log(this.userId + "---" + user._id + '---' + this.path);
+                    this.userService.updateSentMatch(this.userId, user._id, this.path)
+                    .subscribe(msg => {
+                        console.log(msg);
+                        if(msg && msg.code === 0) {
+                            this.alertService.info(msg.message);
+                        }
+                    });
+                }
             });
         }
     }
