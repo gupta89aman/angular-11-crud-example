@@ -18,6 +18,7 @@ export class ListComponent implements OnInit {
     loopArray!: number[];
     currentPage!: number;
     firstRequest!: boolean;
+    perPage: number;
     constructor(
         private route: ActivatedRoute,
         private router: Router,
@@ -26,6 +27,7 @@ export class ListComponent implements OnInit {
                 return false;
         }
         this.firstRequest = true;
+        this.perPage = LIMIT;
     }
 
     ngOnInit() {
