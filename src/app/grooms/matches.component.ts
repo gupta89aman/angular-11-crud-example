@@ -70,6 +70,7 @@ export class MatchesComponent implements OnInit {
 
     //type: groom or bride
     getMatches(type: any, mbNr: string, pageNr: number = 0) {
+        this.matPage = pageNr;
         //logic to stop hitting api when user clicks on the current page
         if(this.firstRequest !== true && pageNr == this.currentPage) {
             return;

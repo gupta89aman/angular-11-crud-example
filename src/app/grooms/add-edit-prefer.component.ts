@@ -28,6 +28,7 @@ export class AddEditPreferComponent implements OnInit {
     public preference!: Preferences;
     public userId!: string;
     public dob!: string;
+    public currentPage!:number;
     constructor(
         private formBuilder: FormBuilder,
         private route: ActivatedRoute,
@@ -46,7 +47,13 @@ export class AddEditPreferComponent implements OnInit {
         this.route.queryParamMap
         .pipe(map(params => params.get('dob') || 'None'))
         .subscribe(result => this.dob = result);            
-        console.log(this.path);
+
+        this.route.queryParamMap
+                    .pipe(map(params => params.get('page') || 'None'))
+                    .subscribe(result => {
+                        let num = Number.parseInt(result);
+                        this.currentPage = isNaN(num) ? 0 : num;
+                    });
         
     }
 
@@ -118,7 +125,7 @@ export class AddEditPreferComponent implements OnInit {
 
     
     private routeToMainPage() {
-        this.router.navigate(['../'], { queryParams: { path: this.path }, relativeTo: this.route});
+        this.router.navigate(['../'], { queryParams: { path: this.path, page: this.currentPage }, relativeTo: this.route});
     }
 
     getJobCities(state: string){

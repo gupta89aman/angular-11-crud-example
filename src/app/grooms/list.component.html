@@ -49,7 +49,7 @@
                     <span *ngIf="!user.isDeleting">Delete</span>
                 </button>
                 &nbsp;
-                <a routerLink="preferences/{{ user.userId}}" [queryParams]="{ path: path, dob: user.dob }" class="btn btn-sm btn-success">Preferences</a>
+                <a routerLink="preferences/{{ user.userId}}" [queryParams]="{ path: path, dob: user.dob, page: currentPage }" class="btn btn-sm btn-success">Preferences</a>
                 &nbsp;
                 <button (click)="generateMatches(user.waNr)" class="btn btn-sm btn-success">
                     <span>Generate</span>
