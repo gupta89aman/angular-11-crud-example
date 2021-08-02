@@ -23,6 +23,8 @@ export class MatchesComponent implements OnInit {
     currentUser!:Person;
     usrMbNr!: string;
     oppositePath!: string;
+    perPage!: number;
+    matPage!:number;
     constructor (
         private route: ActivatedRoute,
         private router: Router,
@@ -33,6 +35,8 @@ export class MatchesComponent implements OnInit {
             this.router.routeReuseStrategy.shouldReuseRoute = function() {
                 return false;
         }
+        this.perPage = LIMIT;
+        this.matPage = 0;
     }
 
     ngOnInit() {
@@ -43,6 +47,15 @@ export class MatchesComponent implements OnInit {
         this.route.queryParamMap
         .pipe(map(params => params.get('userId') || 'None'))
         .subscribe(result => this.userId = result);
+        
+        //logic for page and serial Number calculation help
+        this.route.queryParamMap
+        .pipe(map(params => params.get('pageNr') || 'None'))
+        .subscribe(result => {
+            let num = Number.parseInt(result);
+            this.matPage = isNaN(num) ? 0 : num;
+        });
+
         this.oppositePath = this.path == 'groom' ? 'bride' : 'groom';
         this.mbNr = this.route.snapshot.params['mbNr'];
         this.firstRequest = true;
@@ -51,15 +64,12 @@ export class MatchesComponent implements OnInit {
         this.userService.getById(this.userId, this.path)
                                         .subscribe(data => {
                                             this.currentUser = data;
-                                            console.log(this.currentUser);
                                         });
         
     }
 
     //type: groom or bride
     getMatches(type: any, mbNr: string, pageNr: number = 0) {
-        console.log('pageNr:' + pageNr);
-
         //logic to stop hitting api when user clicks on the current page
         if(this.firstRequest !== true && pageNr == this.currentPage) {
             return;
@@ -69,7 +79,6 @@ export class MatchesComponent implements OnInit {
         try {
             this.userService.getMatches(mbNr, type, pageNr)
             .subscribe(matches => {
-                console.log(matches.users);
                 this.persons = matches.users;
                 this.count = matches.count;
                 this.page =  Math.ceil(matches.total / LIMIT);
@@ -126,7 +135,7 @@ export class MatchesComponent implements OnInit {
         });
     }
 
-    sendAll(){
+    sendAll() {
         console.log(this.usrMbNr);
         if(!this.usrMbNr || !this.currentUser.paid){
             this.alertService.info('You are not a paid customer. Paid: - ' + this.currentUser.paid)
@@ -195,7 +204,7 @@ export class MatchesComponent implements OnInit {
                 message += '\n *Qualification*: ' + user.qualification;
             }
             if(user.jobDesc) {
-                message += '\n *Occupation*: ' + user.jobDesc;
+                message += '\n *JobType:*: ' + user.jobDesc;
             }
             if(!user.jobDesc && !user.jobType){
                 message += '\n *Occupation*: ' + user.jobType;
