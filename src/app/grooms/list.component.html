@@ -31,8 +31,8 @@
     <tbody style="font-size: small;">
         <tr *ngFor="let user of persons; let ele = index">
             <td>{{ (currentPage * perPage) + ele + 1}}</td>
-            <td> <a routerLink="matches/{{user.waNr}}" [queryParams]="{ path: path, userId: user.userId}" class="mr-1">Matches</a></td>
-            <td><a routerLink="edit/{{user.userId}}" [queryParams]="{ path: path}" class="mr-1">{{user.waNr}}</a></td>
+            <td> <a routerLink="matches/{{user.waNr}}" [queryParams]="{ path: path, userId: user.userId, page: currentPage}" class="mr-1">Matches</a></td>
+            <td><a routerLink="edit/{{user.userId}}" [queryParams]="{ path: path, page: currentPage}" class="mr-1">{{user.waNr}}</a></td>
             <td>{{user.dob}}</td>
             <td>{{user.time}}</td>
             <td>{{user.cityOfBirth}}/ {{user.stateOfBirth}}</td>

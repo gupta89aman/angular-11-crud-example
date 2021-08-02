@@ -33,8 +33,13 @@ export class ListComponent implements OnInit {
     ngOnInit() {
         this.route.queryParamMap
         .pipe(map(params => params.get('path') || 'None')).subscribe(result => this.path = result);
+        this.route.queryParamMap
+        .pipe(map(params => params.get('page') || 'None')).subscribe(result =>  { 
+                                                                let num = Number.parseInt(result); 
+                                                                this.page = isNaN(num) ? 0 : num;
+                                                            });
         this.currentPage = 0;
-        this.getAll(this.path);
+        this.getAll(this.path, this.page);
 
     }
 

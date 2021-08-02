@@ -26,7 +26,7 @@ export class AddEditComponent implements OnInit {
     public jobTypes!: string[];
     public person!: Person;
     public path!: string;
-
+    public page!: number;
     constructor(
         private formBuilder: FormBuilder,
         private route: ActivatedRoute,
@@ -39,6 +39,12 @@ export class AddEditComponent implements OnInit {
         this.jobCities = this.cities = [];
         this.route.queryParamMap
         .pipe(map(params => params.get('path') || 'None')).subscribe(result => this.path = result);
+
+        this.route.queryParamMap
+        .pipe(map(params => params.get('page') || 'None')).subscribe(result => { 
+            let num = Number.parseInt(result);
+            this.page = isNaN(num) ? 0 : num;
+        });
     }
 
     ngOnInit() {
@@ -91,7 +97,7 @@ export class AddEditComponent implements OnInit {
             diet: ['veg'],
             drink: ['No'],
             smoking: ['false'],
-            newsPaperDate: ['2021-04-04']
+            newsPaperDate: ['2021-08-01']
             //password: ['', [Validators.minLength(6), this.isAddMode ? Validators.required : Validators.nullValidator]],
             //confirmPassword: ['', this.isAddMode ? Validators.required : Validators.nullValidator]
         });
@@ -179,7 +185,7 @@ export class AddEditComponent implements OnInit {
         this.userService.create(this.person, this.path)
         .subscribe(() => {
             this.alertService.success(`${this.path} added`, {keepAfterRouteChange: true});
-            this.routeToMainPage();
+            this.routeToMainPage(0);
         })
         .add(() => this.loading = false);
     }
@@ -195,14 +201,14 @@ export class AddEditComponent implements OnInit {
             .pipe(first())
             .subscribe(() => {
                 this.alertService.success('User updated', { keepAfterRouteChange: true });
-                this.routeToMainPage();
+                this.routeToMainPage(this.page);
             })
             .add(() => this.loading = false);
         console.log(prsn);
     }
 
-    private routeToMainPage() {
-        this.router.navigate(['../'], { queryParams: { path: this.path }, relativeTo: this.route});
+    private routeToMainPage(page: number) {
+        this.router.navigate(['../'], { queryParams: { path: this.path, page: page }, relativeTo: this.route});
     }
     private getUpdatedPerson(per: Person): Person {
         let prsn: any = { };
