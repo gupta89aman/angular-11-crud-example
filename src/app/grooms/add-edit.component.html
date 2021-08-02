@@ -201,6 +201,30 @@
             <input type="text" formControlName="paid" class="form-control" />
         </div>
     </div>
+    <div class="form-row">
+        <div class="form-group col-2">
+            <label>PR</label>
+            <select formControlName="pr" class="form-control" >
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+        </div>
+        <div class="form-group col-2">
+            <label>PR Country</label>
+            <input type="text" formControlName="prCountry" class="form-control" />
+        </div>
+        <div class="form-group col-2">
+            <label>ILETS</label>
+            <select formControlName="ilets" class="form-control" >
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+        </div>
+        <div class="form-group col">
+            <label>ILETS Band</label>
+            <input type="number" formControlName="iletsBand" class="form-control" />
+        </div>
+    </div>
     <div class="form-group">
         <button [disabled]="loading" class="btn btn-primary">
             <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>

@@ -97,7 +97,11 @@ export class AddEditComponent implements OnInit {
             diet: ['veg'],
             drink: ['No'],
             smoking: ['false'],
-            newsPaperDate: ['2021-08-01']
+            newsPaperDate: ['2021-08-01'],
+            pr: ['no'],
+            prCountry: [''],
+            ilets: ['no'],
+            iletsBand: ['']
             //password: ['', [Validators.minLength(6), this.isAddMode ? Validators.required : Validators.nullValidator]],
             //confirmPassword: ['', this.isAddMode ? Validators.required : Validators.nullValidator]
         });
@@ -167,8 +171,8 @@ export class AddEditComponent implements OnInit {
         this.person = this.form.value;
         console.log(this.form.get('manglik')?.value);
         console.log(this.person);
-        this.person.manglik = this.form.get('manglik')?.value === 'yes' || this.form.get('manglik')?.value === 'true' ? true : false;
-        this.person.paid = this.form.get('paid')?.value === 'yes' || this.form.get('paid')?.value === 'true' ? true : false;
+        this.person.manglik = this.getFormValueFor('manglik')
+        this.person.paid = this.getFormValueFor('paid');
         this.person.nativePlace = this.person.nativePlace || this.person.cityOfBirth as string;
         this.person.jobDesc = this.person.jobDesc || this.person.jobType.toString();
         console.log(this.person.jobType.toString());
@@ -177,6 +181,8 @@ export class AddEditComponent implements OnInit {
         this.person.source = this.person.source || Source.Newspaper;
         this.person.caste = this.person.caste || Caste.Aggarwal;
         this.person.qualification = this.form.get('qualification')?.value.split(',');
+        this.person.pr = this.getFormValueFor('pr');
+        this.person.ilets = this.getFormValueFor('ilets');
         if(this.path === 'groom') {
             this.person.jobState = this.person.jobState || this.person.stateOfBirth as string;
             this.person.jobCity = this.person.jobCity || this.person.cityOfBirth as string;
@@ -188,6 +194,13 @@ export class AddEditComponent implements OnInit {
             this.routeToMainPage(0);
         })
         .add(() => this.loading = false);
+    }
+
+    private getFormValueFor(property: string): boolean {
+        return this.form.get(property)?.value === 'y' 
+                || this.form.get(property)?.value === 'Y' 
+                || this.form.get(property)?.value === 'yes' 
+                || this.form.get(property)?.value === 'true' ? true : false;
     }
 
     private updateUser() {

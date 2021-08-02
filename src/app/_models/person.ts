@@ -31,7 +31,11 @@ export interface Person {
     newsPaperDate: string,
     score: string,
     _id: string,
-    sent: boolean
+    sent: boolean,
+    pr: boolean,
+    prCountry: string,
+    ilets: boolean,
+    iletsBand: number
 }
 
 export enum JobType {
