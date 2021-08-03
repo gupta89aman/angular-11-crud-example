@@ -101,7 +101,8 @@ export class AddEditComponent implements OnInit {
             pr: ['no'],
             prCountry: [''],
             ilets: ['no'],
-            iletsBand: ['']
+            iletsBand: [''],
+            contacted: ['false']
             //password: ['', [Validators.minLength(6), this.isAddMode ? Validators.required : Validators.nullValidator]],
             //confirmPassword: ['', this.isAddMode ? Validators.required : Validators.nullValidator]
         });

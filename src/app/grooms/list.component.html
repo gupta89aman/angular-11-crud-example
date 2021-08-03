@@ -29,7 +29,7 @@
         </tr>
     </thead>
     <tbody style="font-size: small;">
-        <tr *ngFor="let user of persons; let ele = index">
+        <tr *ngFor="let user of persons; let ele = index" [ngStyle]="{'background-color' : user.contacted === true ? '#e7e7e7' : 'white' }">
             <td>{{ (currentPage * perPage) + ele + 1}}</td>
             <td> <a routerLink="matches/{{user.waNr}}" [queryParams]="{ path: path, userId: user.userId, page: currentPage}" class="mr-1">Matches</a></td>
             <td><a routerLink="edit/{{user.userId}}" [queryParams]="{ path: path, page: currentPage}" class="mr-1">{{user.waNr}}</a></td>
@@ -53,6 +53,10 @@
                 &nbsp;
                 <button (click)="generateMatches(user.waNr)" class="btn btn-sm btn-success">
                     <span>Generate</span>
+                </button>
+                &nbsp;
+                <button [disabled]="user.contacted === true" (click)="updatedContacted(user.waNr)" class="btn btn-sm btn-success">
+                    <span>Contacted</span>
                 </button>
             </td>
         </tr>

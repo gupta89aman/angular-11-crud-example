@@ -75,6 +75,10 @@ export class UserService {
         return this.http.put<any>(`${baseUrl}/${base}/matches/sent/${brideId}/to/${userId}`, null);
     }
 
+    updateContacted(mbNr: string, base: string) {
+        return this.http.put(`${baseUrl}/${base}/contacted/${mbNr}`, null);
+    }
+
     private isGroom(base: string) {
         return base === groom;
     }

@@ -108,4 +108,14 @@ export class ListComponent implements OnInit {
         let inches = height - (feet * 12);
         return feet + '.' + inches;
     }
+
+    updatedContacted(mbNr: string) {
+        this.userService.updateContacted(mbNr, this.path)
+        .subscribe(result => {
+            let index = this.persons.findIndex(prsn => prsn.waNr == mbNr);
+            if(index > -1) {
+                this.persons[index].contacted = true;
+            }
+        });
+    }
 }
