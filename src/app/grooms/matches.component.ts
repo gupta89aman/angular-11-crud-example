@@ -1,7 +1,7 @@
 import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Person } from '@app/_models';
+import { JobType, Person } from '@app/_models';
 import { AlertService, UserService } from '@app/_services';
 import { KundliService } from '@app/_services/kundli.service';
 import { WhatsAppService } from '@app/_services/whatsapp.service';
@@ -84,6 +84,7 @@ export class MatchesComponent implements OnInit {
                 this.count = matches.count;
                 this.page =  Math.ceil(matches.total / LIMIT);
                 this.loopArray = new Array(this.page);
+                console.log(this.persons);
             });
         }
         catch(error) {
@@ -190,7 +191,7 @@ export class MatchesComponent implements OnInit {
 
     private sendWhatsAppMessage(mbNr: string, message: string ){
             console.log(message);
-            return this.whatsAppService.sendMessage('9560170800', message);
+            return this.whatsAppService.sendMessage(mbNr, message);
     }
 
     private generateMessage(user: Person): string{
@@ -198,19 +199,30 @@ export class MatchesComponent implements OnInit {
         if(user) {
             message = '  *Dob*: ' + user.dob;
             message += '\n *Time*: ' + user.time;
-            message += '\n *Place*: ' + user.cityOfBirth + '/' + user.stateOfBirth;
+            message += '\n *Birth Place*: ' + user.cityOfBirth + '/' + user.stateOfBirth;
             message += '\n *Home Town*: ' + user.nativePlace;
             message += '\n *Height*: ' + this.getHeight(user.height) + ' ft';
             if(user.qualification && user.qualification.findIndex(qual => qual === 'BB') < 0) {
                 message += '\n *Qualification*: ' + user.qualification;
             }
-            if(user.jobDesc) {
-                message += '\n *JobType:*: ' + user.jobDesc;
+
+            if(user.jobType){
+                var job = JobType[user.jobType];
+                console.log(typeof job);
+                if(job == 'HouseWife'){
+                    message += '\n *Housewife*: Yes'
+                }
+                else {
+                    message += '\n *JobType*: ' + user.jobType;
+                }
             }
-            if(!user.jobDesc && !user.jobType){
-                message += '\n *Occupation*: ' + user.jobType;
+
+            if(user.jobDesc !== 'HouseWife') {
+                message += '\n *Occupation*: ' + user.jobDesc;
             }
-            if(user.jobState) {
+
+            
+            if(user.jobState && user.jobType !== JobType.HouseWife) {
                 message += '\n *Job Location*: ' + user.jobCity + '/' + user.jobState 
             }
             if(user.income) {

@@ -237,7 +237,7 @@
             <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
             Save
         </button>
-        <a routerLink="/users" [queryParams]="{ path: path }" class="btn btn-link">Cancel</a>
+        <a routerLink="/users#{{location}}" [queryParams]="{ path: path, page: page }" class="btn btn-link">Cancel</a>
     </div>
     <p>myForm value: {{ form.value | json }}</p>
 <p>myForm status: {{ form.status | json }}</p>

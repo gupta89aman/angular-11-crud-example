@@ -27,6 +27,8 @@ export class AddEditComponent implements OnInit {
     public person!: Person;
     public path!: string;
     public page!: number;
+    public location!:string;
+
     constructor(
         private formBuilder: FormBuilder,
         private route: ActivatedRoute,
@@ -45,6 +47,10 @@ export class AddEditComponent implements OnInit {
             let num = Number.parseInt(result);
             this.page = isNaN(num) ? 0 : num;
         });
+
+        this.route.queryParamMap
+        .pipe(map(params => params.get('location') || 'None')).subscribe(result => this.location = result);
+
     }
 
     ngOnInit() {
@@ -117,7 +123,6 @@ export class AddEditComponent implements OnInit {
                                         paid : p.paid ? 'yes' : 'no', 
                                         manglik: p.manglik ? 'yes' : 'no',
                                         qualification: p.qualification.filter(qua => qua.split(',')).join(',')});
-                                console.log(p.newsPaperDate);
                             });
         }
     }

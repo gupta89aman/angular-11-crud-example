@@ -114,7 +114,8 @@ export class ListComponent implements OnInit {
         .subscribe(result => {
             let index = this.persons.findIndex(prsn => prsn.waNr == mbNr);
             if(index > -1) {
-                this.persons[index].contacted = true;
+                this.persons[index].contacted = result.contacted;
+                this.persons[index].contactedDate = result.contactedDate;
             }
         });
     }

@@ -76,7 +76,7 @@ export class UserService {
     }
 
     updateContacted(mbNr: string, base: string) {
-        return this.http.put(`${baseUrl}/${base}/contacted/${mbNr}`, null);
+        return this.http.put<Person>(`${baseUrl}/${base}/contacted/${mbNr}`, null);
     }
 
     private isGroom(base: string) {
