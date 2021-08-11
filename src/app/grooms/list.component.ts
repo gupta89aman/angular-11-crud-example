@@ -3,7 +3,7 @@ import { first } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Person } from '@app/_models';
 import { map } from 'rxjs/operators';
-import { UserService } from '@app/_services';
+import { AlertService, UserService } from '@app/_services';
 import { LIMIT } from '../_helpers/globals';
 
 @Component({ templateUrl: 'list.component.html' })
@@ -22,7 +22,8 @@ export class ListComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private router: Router,
-        private userService: UserService) {
+        private userService: UserService,
+        private alertService: AlertService) {
             this.router.routeReuseStrategy.shouldReuseRoute = function(){
                 return false;
         }
@@ -79,7 +80,11 @@ export class ListComponent implements OnInit {
 
     generateMatches(waNr: string) {
         this.userService.generateMatches(+waNr, this.path)
-        .subscribe();
+        .subscribe(result => {
+            if(result.code === 0){
+                this.alertService.info('New Matches:' + result.data.hasNewMatches == 'true' ? 'Yes' : 'No');
+            }
+        });
     }
 
     //method to search particular person based on mobile number
@@ -118,5 +123,9 @@ export class ListComponent implements OnInit {
                 this.persons[index].contactedDate = result.contactedDate;
             }
         });
+    }
+
+    getDate(date: string) {
+        return new Date(date).toLocaleDateString();
     }
 }

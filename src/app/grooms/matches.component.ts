@@ -191,6 +191,7 @@ export class MatchesComponent implements OnInit {
 
     private sendWhatsAppMessage(mbNr: string, message: string ){
             console.log(message);
+            mbNr = this.path.substr(0,1) + mbNr;
             return this.whatsAppService.sendMessage(mbNr, message);
     }
 
@@ -232,5 +233,9 @@ export class MatchesComponent implements OnInit {
             message += '\n *Mobile Nr*: ' + user.waNr;
         }
         return message;
+    }
+
+    getDate(date: string) {
+        return new Date(date).toLocaleDateString();
     }
 }

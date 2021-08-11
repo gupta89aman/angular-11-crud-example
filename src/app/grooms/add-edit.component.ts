@@ -103,7 +103,7 @@ export class AddEditComponent implements OnInit {
             diet: ['veg'],
             drink: ['No'],
             smoking: ['false'],
-            newsPaperDate: ['2021-08-01'],
+            newsPaperDate: ['2021-08-08'],
             pr: ['no'],
             prCountry: [''],
             ilets: ['no'],

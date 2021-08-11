@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
 import { Person } from '@app/_models';
 import { Preferences } from '@app/_models/preferences';
-import { PersonData } from '@app/_models/personData';
+import { ApiResponse, PersonData } from '@app/_models/personData';
 import { Observable, ReplaySubject } from 'rxjs';
 import { Globals } from './global.service';
 
@@ -64,7 +64,7 @@ export class UserService {
     }
 
     generateMatches(mobileNr: number, base: string) {
-        return this.http.put(`${baseUrl}/${base}/matches/${mobileNr}/find`, null);
+        return this.http.put<ApiResponse>(`${baseUrl}/${base}/matches/${mobileNr}/find`, null);
     }
 
     deleteMatch(userId: string, personId: string, base: string){

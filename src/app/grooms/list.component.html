@@ -15,17 +15,17 @@
         <tr>
             <th></th>
             <th style="width: 5%;"></th>
-            <th style="width: 5%;">Mobile Nr</th>
-            <th style="width: 10%;">DateOfBi rth</th>
-            <th style="width: 10%;">Time</th>
+            <th style="width: 5%;">MB No</th>
+            <th style="width: 15%;">DOB Time</th>
             <th style="width: 10%;">City/ State</th>
-            <th>Height</th>
+            <th>Ht</th>
             <th style="width: 10%;">Job</th>
             <th style="width: 10%;">Native Place</th>
             <th style="width: 10%;">Income</th>
-            <th style="width: 10%;">Qualifi cation</th>
-            <th style="width: 10%;">Job City</th>
+            <th style="width: 5%;">Qualifi cation</th>
+            <th style="width: 10%;">Job City / State</th>
             <th style="width: 10%;">Paid</th>
+            <th style="width: 10%;">Source/ Date</th>
             <th></th>
         </tr>
     </thead>
@@ -34,16 +34,16 @@
             <td>{{ (currentPage * perPage) + ele + 1}}</td>
             <td> <a routerLink="matches/{{user.waNr}}" [queryParams]="{ path: path, userId: user.userId, page: currentPage}" class="mr-1">Matches</a></td>
             <td><a routerLink="edit/{{user.userId}}" [queryParams]="{ path: path, page: currentPage, location: user.waNr}" class="mr-1">{{user.waNr}}</a></td>
-            <td>{{user.dob}}</td>
-            <td>{{user.time}}</td>
+            <td>{{user.dob}} <p></p> {{user.time}}</td>
             <td>{{user.cityOfBirth}}/ {{user.stateOfBirth}}</td>
-            <td>{{ getHeight(user.height) }} ft</td>
-            <td>{{user.jobType}}/ {{user.jobDesc}}</td>
+            <td>{{ getHeight(user.height) }}</td>
+            <td>{{user.jobType}} / {{user.jobDesc}}</td>
             <td>{{user.nativePlace }}</td>
             <td>{{user.income}}</td>
             <td>{{user.qualification}}</td>
-            <td>{{user.jobCity}}</td>
+            <td>{{user.jobCity}} {{user.jobState}}</td>
             <td>{{user.paid ? 'Yes': 'No'}}</td>
+            <td>{{user.source}} <p></p>{{ getDate(user.newsPaperDate)}} </td>
             <td style="white-space: nowrap">
                 <p>
                 <button (click)="deleteUser(user.userId)" class="btn btn-sm btn-danger btn-delete-user" [disabled]="user.isDeleting">
