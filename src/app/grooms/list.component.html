@@ -9,6 +9,8 @@
 </table>
 </form>
 <a routerLink="add" [queryParams]="{ path: path }" class="btn btn-sm btn-success mb-2">Add </a>
+&nbsp;
+<button class="btn btn-sm btn-success mb-2" (click)="showContacted()" >Show Contacted</button>
 
 <table class="table table-striped table-bordered" >
     <thead>
@@ -33,7 +35,7 @@
         <tr *ngFor="let user of persons; let ele = index" [ngStyle]="{'background-color' : user.contacted === true ? '#e7e7e7' : 'white' }" id={{user.waNr}}>
             <td>{{ (currentPage * perPage) + ele + 1}}</td>
             <td> <a routerLink="matches/{{user.waNr}}" [queryParams]="{ path: path, userId: user.userId, page: currentPage}" class="mr-1">Matches</a></td>
-            <td><a routerLink="edit/{{user.userId}}" [queryParams]="{ path: path, page: currentPage, location: user.waNr}" class="mr-1">{{user.waNr}}</a></td>
+            <td><a routerLink="edit/{{user.userId}}" [queryParams]="{ path: path, page: currentPage, location: user.waNr}" class="mr-1">{{user.waNr}}</a> {{user.altNr }}</td>
             <td>{{user.dob}} <p></p> {{user.time}}</td>
             <td>{{user.cityOfBirth}}/ {{user.stateOfBirth}}</td>
             <td>{{ getHeight(user.height) }}</td>
@@ -72,7 +74,7 @@
         <tr *ngIf="persons" style="column-span: all;">
             <td style="align-content: center; text-align: center;" colspan="12">
                 <span class="mr-1" *ngFor="let loop of loopArray; let indexEle = index">
-                    <button class="btn btn-sm btn-success" [disabled]="currentPage == indexEle" (click)="getAll(path, indexEle )">{{ indexEle + 1}}</button>
+                    <button class="btn btn-sm btn-success" [disabled]="currentPage == indexEle" (click)="getAll(path, indexEle)">{{ indexEle + 1}}</button>
                 </span>
             </td>
         </tr>

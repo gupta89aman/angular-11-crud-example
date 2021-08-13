@@ -108,7 +108,8 @@ export class AddEditComponent implements OnInit {
             prCountry: [''],
             ilets: ['no'],
             iletsBand: [''],
-            contacted: ['false']
+            contacted: ['false'],
+            familyDetails:['Father: .\nMother: . \nBrother: .\nSister: .']
             //password: ['', [Validators.minLength(6), this.isAddMode ? Validators.required : Validators.nullValidator]],
             //confirmPassword: ['', this.isAddMode ? Validators.required : Validators.nullValidator]
         });
@@ -176,7 +177,7 @@ export class AddEditComponent implements OnInit {
     private createGroom() {
         this.person = this.form.value;
         console.log(this.form.get('manglik')?.value);
-        console.log(this.person);
+        
         this.person.manglik = this.getFormValueFor('manglik')
         this.person.paid = this.getFormValueFor('paid');
         this.person.nativePlace = this.person.nativePlace || this.person.cityOfBirth as string;
@@ -189,11 +190,15 @@ export class AddEditComponent implements OnInit {
         this.person.qualification = this.form.get('qualification')?.value.split(',');
         this.person.pr = this.getFormValueFor('pr');
         this.person.ilets = this.getFormValueFor('ilets');
+        let hasFamilyDetails = /\d/.test(this.form.get('familyDetails')?.value) || this.form.get('familyDetails')?.value.length > 50 ;
+        if(hasFamilyDetails) {
+            this.person.familyDetails = this.form.get('familyDetails')?.value.replace('\n', '');
+        }
         if(this.path === 'groom') {
             this.person.jobState = this.person.jobState || this.person.stateOfBirth as string;
             this.person.jobCity = this.person.jobCity || this.person.cityOfBirth as string;
         }
-       
+        console.log(this.person);
         this.userService.create(this.person, this.path)
         .subscribe(() => {
             this.alertService.success(`${this.path} added`, {keepAfterRouteChange: true});
@@ -212,6 +217,7 @@ export class AddEditComponent implements OnInit {
     private updateUser() {
         
         let prsn = this.getUpdatedPerson(this.form.value);
+        console.log(prsn);
         prsn.userId = this.id;
         prsn.manglik = this.form.get('manglik')?.value === 'yes' || this.form.get('manglik')?.value === 'true' ? true : false;
         console.log(prsn);
@@ -229,6 +235,7 @@ export class AddEditComponent implements OnInit {
     private routeToMainPage(page: number) {
         this.router.navigate(['../'], { queryParams: { path: this.path, page: page }, relativeTo: this.route});
     }
+
     private getUpdatedPerson(per: Person): Person {
         let prsn: any = { };
         let k: keyof typeof per;
@@ -240,6 +247,17 @@ export class AddEditComponent implements OnInit {
         }
         if(prsn.qualification){
             prsn.qualification = prsn.qualification.split(',');
+        }
+
+        if(prsn.familyDetails){
+            let hasFamilyDetails = /\d/.test(prsn.familyDetails) || prsn.familyDetails.length > 50;
+            console.log('has family details:'+ hasFamilyDetails);
+            if(hasFamilyDetails) {
+                prsn.familyDetails = prsn.familyDetails.replace('\n','');
+            }
+            else {
+                delete prsn.familyDetails;
+            }
         }
         return prsn;
     } 

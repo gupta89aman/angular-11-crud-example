@@ -16,17 +16,21 @@ export class UserService {
     constructor(private http: HttpClient, private globals: Globals) { 
     }
     
-    getAll(base: string, page: number = 0) {
+    getAll(base: string, pageNr: number = 0) {
         // if(this.canGetFromLocal(base, page)) {
         //     return this.getFromLocal<PersonData>(page, base); 
         // }
-        let response = this.http.get<PersonData>(`${baseUrl}/${base}?page=${page}`);
+        let response = this.http.get<PersonData>(`${baseUrl}/${base}?page=${pageNr}`);
         //this.updateUsers(base, response);
         return response;
     }
 
-    getById(id: string, base:string) {
+    getById(id: string, base: string) {
         return this.http.get<Person>(`${baseUrl}/${base}/${id}`);
+    }
+
+    getByQuery(query: string, base: string) {
+        return this.http.get<PersonData>(`${baseUrl}/${base}/${query}`);
     }
 
     create(params: any, base:string) {

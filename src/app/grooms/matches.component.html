@@ -49,7 +49,7 @@
             [ngStyle]="{'background-color' : user.sent === true ? '#e7e7e7' : 'white' }">
                 <td>{{ (matPage * perPage) + ele + 1}}</td>
                 <td><a routerLink="/users/edit/{{user.userId}}" [queryParams]="{ path: oppositePath}" class="mr-1">{{user.waNr}}</a></td>
-                <td>{{user.dob}}<p></p>{{user.time}}</td>
+                <td [ngStyle]="{'background-color' : user.time === '02:02' ? 'yellow' : 'light grey' }">{{user.dob}}<p></p>{{user.time}}</td>
 
                 <td>{{user.cityOfBirth}} / {{user.stateOfBirth}}</td>
                 <td>{{user.nativePlace }}</td>
@@ -68,7 +68,7 @@
                         <span *ngIf="!user.isDeleting">Remove</span>
                     </button>
                     &nbsp;
-                    <button [disabled]="user.sent === true" (click)="sendMatch(user.userId)" class="btn btn-sm btn-success">
+                    <button [disabled]="user.sent === true || user.time === '02:02'" (click)="sendMatch(user.userId)" class="btn btn-sm btn-success">
                         <span >Send</span>
                     </button>
                     &nbsp;

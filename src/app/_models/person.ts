@@ -37,7 +37,8 @@ export interface Person {
     ilets: boolean,
     iletsBand: number,
     contacted: boolean,
-    contactedDate: string
+    contactedDate: string,
+    familyDetails: string
 }
 
 export enum JobType {

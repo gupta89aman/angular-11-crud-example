@@ -1,7 +1,7 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import { first } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Person } from '@app/_models';
+import { Person, PersonData } from '@app/_models';
 import { map } from 'rxjs/operators';
 import { AlertService, UserService } from '@app/_services';
 import { LIMIT } from '../_helpers/globals';
@@ -19,6 +19,8 @@ export class ListComponent implements OnInit {
     currentPage!: number;
     firstRequest!: boolean;
     perPage: number;
+    showContactedOnly!: boolean;
+    showContactedText!: string;
     constructor(
         private route: ActivatedRoute,
         private router: Router,
@@ -29,6 +31,7 @@ export class ListComponent implements OnInit {
         }
         this.firstRequest = true;
         this.perPage = LIMIT;
+        this.showContactedText = 'Show Contacted';
     }
 
     ngOnInit() {
@@ -58,11 +61,7 @@ export class ListComponent implements OnInit {
         this.userService.getAll(type, pageNr)
             .pipe(first())
             .subscribe(persons => {
-                this.persons = persons.users;
-                this.count = persons.count;
-                this.page =  Math.ceil(persons.total / LIMIT);
-                //used for paging purpose,stores page numbers to show on front html view
-                this.loopArray = new Array(this.page);
+                this.updateList(persons);
             });
     }
 
@@ -128,4 +127,24 @@ export class ListComponent implements OnInit {
     getDate(date: string) {
         return new Date(date).toLocaleDateString();
     }
+
+    showContacted(pageNr: number = 0) {
+        this.showContactedText = 'Show All';
+        this.showContactedOnly = true;
+        let query = '?page='+pageNr+'&contacted=true';
+        this.userService.getByQuery(query, this.path)
+        .pipe(first())
+        .subscribe(persons => {
+            this.updateList(persons);
+        });
+    }
+
+    private updateList(persons: PersonData){
+        this.persons = persons.users;
+        this.count = persons.count;
+        this.page =  Math.ceil(persons.total / LIMIT);
+        //used for paging purpose,stores page numbers to show on front html view
+        this.loopArray = new Array(this.page);
+    }
+
 }
