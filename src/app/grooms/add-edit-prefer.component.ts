@@ -6,7 +6,7 @@ import { first, map } from 'rxjs/operators';
 import { UserService, AlertService } from '@app/_services';
 import { MustMatch } from '@app/_helpers';
 import { RxwebValidators } from '@rxweb/reactive-form-validators';
-import { Caste, JobType } from '../_models/person';
+import { Caste, JobType, Person } from '../_models/person';
 import { Preferences } from '../_models/preferences';
 import { LocationService } from '@app/_services/location.service';
 
@@ -29,6 +29,7 @@ export class AddEditPreferComponent implements OnInit {
     public userId!: string;
     public dob!: string;
     public currentPage!:number;
+    public user!:Person;
     constructor(
         private formBuilder: FormBuilder,
         private route: ActivatedRoute,
@@ -61,6 +62,10 @@ export class AddEditPreferComponent implements OnInit {
         this.states = this.locationService.getStates();
         this.userId = this.route.snapshot.params['id'];
         this.jobTypes = Object.keys(JobType).filter(k => isNaN(Number(k)));
+        this.userService.getByQuery('?userId='+this.userId, this.path)
+        .subscribe(result => {
+            this.user = result.users[0];
+        })
         this.form = this.formBuilder.group({
             userId: [this.userId],
             lowerAge: ['', Validators.required],
@@ -181,4 +186,14 @@ export class AddEditPreferComponent implements OnInit {
         }
         return prefer;
     } 
+
+    getDate(date: string) {
+        return new Date(date).toLocaleDateString();
+    }
+
+    getHeight(height: number) {
+        let feet = Math.floor(height / 12);
+        let inches = height - (feet * 12);
+        return feet + '.' + inches;
+    }
 }

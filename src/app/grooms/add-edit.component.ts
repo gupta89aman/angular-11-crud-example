@@ -54,11 +54,6 @@ export class AddEditComponent implements OnInit {
     }
 
     ngOnInit() {
-        let income = '' ;
-        if(this.path === 'groom') {
-            income = '0'
-        }
-
         this.states = this.locationService.getStates();
         this.id = this.route.snapshot.params['id'];
         this.isAddMode = !this.id;
@@ -82,11 +77,11 @@ export class AddEditComponent implements OnInit {
             stateOfBirth: ['', [Validators.required, RxwebValidators.alpha()]],
             nativePlace: [''],
             qualification: ['', Validators.required],
-            jobType: ['', Validators.required],
+            jobType: ['HouseWife', Validators.required],
             jobDesc: [''],
             jobCity: [''],
             jobState: [''],
-            income: [income],
+            income: ['0'],
             waNr: ['', [Validators.required, RxwebValidators.digit(), RxwebValidators.maxLength({ value:10 })]],
             altNr: [''],
             email: [''],
@@ -101,15 +96,16 @@ export class AddEditComponent implements OnInit {
             address: [''],
             userId:[''],
             diet: ['veg'],
-            drink: ['No'],
+            drink: ['no'],
             smoking: ['false'],
-            newsPaperDate: ['2021-08-08'],
-            pr: ['no'],
+            newsPaperDate: ['2021-08-15'],
+            pr: ['false'],
             prCountry: [''],
-            ilets: ['no'],
+            ilets: ['false'],
             iletsBand: [''],
             contacted: ['false'],
-            familyDetails:['Father: .\nMother: . \nBrother: .\nSister: .']
+            familyDetails:['Father: .\nMother: .\nBrother: .\nSister: .'],
+            hasPhoto:['false']
             //password: ['', [Validators.minLength(6), this.isAddMode ? Validators.required : Validators.nullValidator]],
             //confirmPassword: ['', this.isAddMode ? Validators.required : Validators.nullValidator]
         });

@@ -32,13 +32,15 @@ export interface Person {
     score: string,
     _id: string,
     sent: boolean,
+    vsent: boolean,
     pr: boolean,
     prCountry: string,
     ilets: boolean,
     iletsBand: number,
     contacted: boolean,
     contactedDate: string,
-    familyDetails: string
+    familyDetails: string,
+    hasPhoto: boolean
 }
 
 export enum JobType {

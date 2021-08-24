@@ -1,4 +1,21 @@
-﻿<form #myform [formGroup]="form" (ngSubmit)="onSubmit()">
+﻿<table class="table table-striped table-bordered" >
+    <tbody style="font-size: small;">
+        <tr>
+            <td>{{user.waNr}} {{user.altNr }}</td>
+            <td>{{user.dob}} <p></p> {{user.time}}</td>
+            <td>{{user.cityOfBirth}}/ {{user.stateOfBirth}}</td>
+            <td>{{ getHeight(user.height) }}</td>
+            <td>{{user.jobType}} / {{user.jobDesc}}</td>
+            <td>{{user.nativePlace }}</td>
+            <td>{{user.income}}</td>
+            <td>{{user.qualification}}</td>
+            <td>{{user.jobCity}} {{user.jobState}}</td>
+            <td>{{user.paid ? 'Yes': 'No'}}</td>
+            <td>{{user.source}} <p></p>{{ getDate(user.newsPaperDate)}} </td>
+        </tr>
+    </tbody>
+</table>
+<form #myform [formGroup]="form" (ngSubmit)="onSubmit()">
     <div class="form-row">
         <div class="form-group col-2">
             <label>User Id</label>

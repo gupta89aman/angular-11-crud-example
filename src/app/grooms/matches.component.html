@@ -12,32 +12,32 @@
             <tr>
                 <th></th>
                 <th style="width: 5%">MB No</th>
-                <th style="min-width: 100px;">DOB Time</th>
+                <th style="min-width: 100px;">DOB YYYY- MM- DD Time</th>
                 <th style="width: 10%">City/State</th>
                 <th>Native Place</th> 
                 <th>Height</th>
                 <th style="width: 10%;">Qualifi cation</th>
                 <th style="width: 5%">Job</th>
-                <th style="width: 5%">Income</th>
+                <th style="width: 5%">Income Photo</th>
                 <th style="width: 5%">Caste</th>
                 <th style="width: 10%">Job City</th>
                 <th style="width: 5%">Mang lik</th>
                 <th style="width: 5%;">Score</th>
-                <th style="width: 5%;">Source</th>
+                <th style="width: 5%;">Source MM-DD-YYYY</th>
                 <th style="width: 5%;"></th>
             </tr>
         </thead>
         <tbody style="font-size: small;">
             <tr>
                 <td></td>
-                <td></td>
+                <td>{{currentUser.waNr}} {{currentUser.altNr}}</td>
                 <td>{{currentUser.dob}}<p></p>{{currentUser.time}}</td>
                 <td>{{currentUser.cityOfBirth}} / {{currentUser.stateOfBirth}}</td>
                 <td>{{currentUser.nativePlace }}</td>
                 <td>{{ getHeight(currentUser.height) }} ft</td>
                 <td>{{currentUser.qualification}}</td>
                 <td>{{currentUser.jobType}}  {{currentUser.jobDesc}}</td>
-                <td>{{currentUser.income}}</td>
+                <td>{{currentUser.income}} <p></p>{{ currentUser.hasPhoto ? 'Yes' : 'No'}}</td>
                 <td>{{currentUser.caste}}</td>
                 <td>{{currentUser.jobCity}}</td>
                 <td>{{currentUser.manglik === true ? 'yes' : 'no'}}</td>
@@ -46,7 +46,7 @@
                 <td></td>
             </tr>
             <tr *ngFor="let user of persons; let ele = index" 
-            [ngStyle]="{'background-color' : user.sent === true ? '#e7e7e7' : 'white' }">
+            [ngStyle]="{'background-color' : user.sent === true || user.vsent === true ? '#e7e7e7' : 'white' }">
                 <td>{{ (matPage * perPage) + ele + 1}}</td>
                 <td><a routerLink="/users/edit/{{user.userId}}" [queryParams]="{ path: oppositePath}" class="mr-1">{{user.waNr}}</a></td>
                 <td [ngStyle]="{'background-color' : user.time === '02:02' ? 'yellow' : 'light grey' }">{{user.dob}}<p></p>{{user.time}}</td>
@@ -56,7 +56,7 @@
                 <td>{{ getHeight(user.height) }} ft</td>
                 <td>{{user.qualification}}</td>
                 <td>{{user.jobType}}  {{user.jobDesc}}</td>
-                <td>{{user.income}}</td>
+                <td>{{user.income}}<p>{{user.hasPhoto? 'Yes' : 'No' }}</p></td>
                 <td>{{user.caste}}</td>
                 <td>{{user.jobCity}}</td>
                 <td>{{user.manglik === true ? 'yes' : 'no'}}</td>
@@ -68,7 +68,8 @@
                         <span *ngIf="!user.isDeleting">Remove</span>
                     </button>
                     &nbsp;
-                    <button [disabled]="user.sent === true || user.time === '02:02'" (click)="sendMatch(user.userId)" class="btn btn-sm btn-success">
+                    <button [ngClass]="{ 'btn-success': user.vsent === undefined || user.vsent === false,
+                                     'btn-warning': user.vsent === true}" [disabled]="user.sent === true || user.time === '02:02' || user.vsent === true" (click)="sendMatch(user.userId)" class="btn btn-sm btn-success">
                         <span >Send</span>
                     </button>
                     &nbsp;

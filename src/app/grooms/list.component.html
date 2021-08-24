@@ -23,10 +23,10 @@
             <th>Ht</th>
             <th style="width: 10%;">Job</th>
             <th style="width: 10%;">Native Place</th>
-            <th style="width: 10%;">Income</th>
+            <th style="width: 10%;">Income Photo</th>
             <th style="width: 5%;">Qualifi cation</th>
             <th style="width: 10%;">Job City / State</th>
-            <th style="width: 10%;">Paid</th>
+            <th style="width: 10%;">Manglik</th>
             <th style="width: 10%;">Source/ Date</th>
             <th></th>
         </tr>
@@ -41,10 +41,10 @@
             <td>{{ getHeight(user.height) }}</td>
             <td>{{user.jobType}} / {{user.jobDesc}}</td>
             <td>{{user.nativePlace }}</td>
-            <td>{{user.income}}</td>
+            <td>{{user.income}} <p></p>{{user.hasPhoto ? 'Yes' : 'No'}}</td>
             <td>{{user.qualification}}</td>
             <td>{{user.jobCity}} {{user.jobState}}</td>
-            <td>{{user.paid ? 'Yes': 'No'}}</td>
+            <td>{{user.manglik ? 'Yes': 'No'}}</td>
             <td>{{user.source}} <p></p>{{ getDate(user.newsPaperDate)}} </td>
             <td style="white-space: nowrap">
                 <p>
