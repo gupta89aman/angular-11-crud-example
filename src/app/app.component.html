@@ -2,13 +2,13 @@
 <nav class="navbar navbar-expand navbar-dark bg-dark">
     <div class="navbar-nav">
         <a class="nav-item nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
-        <a class="nav-item nav-link" routerLink="/users" [queryParams]="{ path: 'groom' }" routerLinkActive="active">Groom</a>
-        <a class="nav-item nav-link" routerLink="/users" [queryParams]="{ path: 'bride' }" routerLinkActive="active">Bride</a>
+        <a class="nav-item nav-link" routerLink="/Sellers" routerLinkActive="active">Sellers</a>
+        <a class="nav-item nav-link" routerLink="/Products" routerLinkActive="active">Products</a>
     </div>
 </nav>
 
 <!-- main app container -->
 <div class="app-container bg-light">
-    <alert></alert>
+    <!-- <alert></alert> -->
     <router-outlet></router-outlet>
 </div>

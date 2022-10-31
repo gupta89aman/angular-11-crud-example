@@ -1,0 +1,36 @@
+﻿<!-- <h1 *ngIf="isAddMode">Add User</h1>
+<h1 *ngIf="!isAddMode">Edit User</h1> -->
+<form #myform [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-row">
+        <div class="form-group col-2">
+            <label>Name</label>
+            <input type="text" formControlName="Name" class="form-control" />
+        </div>
+        <div *ngIf="!isAddMode" class="form-group col">
+            <label>SellerId</label>
+            <input type="text"  [attr.disabled]="true" formControlName="SellerId" class="form-control" />
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-2">
+            <label>Company Name</label>
+            <input type="text" formControlName="CompanyName" class="form-control" />
+        </div>
+        <div class="form-group col">
+          <label>Mobile Number</label>
+          <input type="text" formControlName="waNr" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.waNr.errors }" />
+          <div *ngIf="submitted && f.waNr.errors" class="invalid-feedback">
+              <div *ngIf="f.waNr.errors.required">Mobile is required</div>
+          </div>
+      </div>
+    </div>
+    <div class="form-group">
+        <button [disabled]="loading" class="btn btn-primary">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+            Save
+        </button>
+        <!-- <a routerLink="/users#{{location}}" [queryParams]="{ path: path, page: page }" class="btn btn-link">Cancel</a> -->
+    </div>
+    <p>myForm value: {{ form.value | json }}</p>
+<p>myForm status: {{ form.status | json }}</p>
+</form>
