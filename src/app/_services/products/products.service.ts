@@ -20,8 +20,13 @@ export class ProductsService {
     return response;
   }
 
+  getAllProducts(pageNr: number = 0) {
+    let response = this.http.get<ResponseData<ProductBrand[]>>(`${baseUrl}`);
+    return response;
+  }
+
   getById(id: string) {
-      return this.http.get<ResponseData<ProductBrand>>(`${baseUrl}/id`);
+      return this.http.get<ResponseData<ProductBrand>>(`${baseUrl}/${id}`);
   }
 
   search(query: string) {
@@ -30,5 +35,13 @@ export class ProductsService {
 
   create(params: any) {
     return this.http.post<ResponseData<ProductBrand>>(`${baseUrl}`, params);
+  }
+
+  update(id:string, params: any) {
+    return this.http.put<ResponseData<ProductBrand>>(`${baseUrl}/${id}`, params);
+  }
+
+  delete(id: string) {
+    return this.http.delete<ResponseData<string>>(`${baseUrl}/id`);
   }
 }

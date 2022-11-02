@@ -6,7 +6,7 @@ import { ProductBrand } from '@app/_models/ProductBrand';
 import { ProductsService } from '@app/_services/products/products.service';
 
 @Component({ templateUrl: 'list.component.html' })
-export class ListComponent implements OnInit {
+export class ProductListComponent implements OnInit {
     products!: ProductBrand[];
     page!: number;
     count!: number;
@@ -17,6 +17,7 @@ export class ListComponent implements OnInit {
     showContactedOnly!: boolean;
     showContactedText!: string;
     prodName!:string;
+    working!: boolean;
 
     constructor(
         private route: ActivatedRoute,
@@ -27,6 +28,7 @@ export class ListComponent implements OnInit {
         }
         this.firstRequest = true;
         this.perPage = 10;
+        this.working = false;
     }
 
     ngOnInit() {
@@ -52,11 +54,15 @@ export class ListComponent implements OnInit {
 
         this.firstRequest = false;
         this.currentPage = pageNr;
-        // this.productService.getAllProductsByBrandName(type, pageNr)
-        //     .pipe(first())
-        //     .subscribe(persons => {
-        //         this.updateList(persons);
-        //     });
+        this.working = true;
+        this.productService.getAllProducts(pageNr)
+            .pipe(first())
+            .subscribe(prods => {
+                this.products = prods.data;
+                console.log(this.products);
+            });
+            this.working = false;
+            return;
     }
 
     //method to search particular person based on mobile number
@@ -65,7 +71,14 @@ export class ListComponent implements OnInit {
     }
 
     deleteProduct(pbId: string) {
-
+      let index = this.products.findIndex(prod => prod.pbId == pbId);
+      if(index < 0) return;
+      this.working = true;
+      this.productService.delete(pbId)
+      .pipe(first())
+      .subscribe(prod => console.log(prod.data));
+      this.working = false;
+      return;
     }
 
 }

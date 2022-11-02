@@ -2,15 +2,14 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { HomeComponent } from './home';
-import { ProductAddEditComponent } from './products/add-edit.component';
-import { ListComponent } from './Seller/list.component';
 
-//const SellersMo = () => import('./grooms/grooms.module').then(x => x.GroomsModule);
+const SellersModule = () => import('./Seller/sellers.module').then(x => x.SellerssModule);
+const ProductsModule = () => import('./products/products.module').then(x => x.ProductsModule);
 
 const routes: Routes = [
     { path: '', component: HomeComponent },
-    { path: 'Sellers', component: ListComponent },
-    { path: 'Products', component: ProductAddEditComponent },
+    { path: 'Sellers', loadChildren: SellersModule },
+    { path: 'Products', loadChildren: ProductsModule },
 
     // otherwise redirect to home
     { path: '**', redirectTo: 'Sellers' }

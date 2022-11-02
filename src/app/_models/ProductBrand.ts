@@ -1,5 +1,9 @@
 
-interface ProductBrand {
+interface IBase {
+  Working: boolean;
+}
+
+interface ProductBrand extends IBase{
   pbId: string,
   Brand: string,
   ProductName: string
@@ -22,7 +26,7 @@ interface ResponseData<T> {
   data: T
 }
 
-interface Seller {
+interface Seller extends IBase{
   SellerId: string,
   CompanyName: string,
   Name: string,

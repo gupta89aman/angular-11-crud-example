@@ -18,7 +18,7 @@ export class SellerService {
   }
 
   getById(id: string) {
-      return this.http.get<ResponseData<Seller>>(`${baseUrl}/id`);
+      return this.http.get<ResponseData<Seller>>(`${baseUrl}/${id}`);
   }
 
   search(query: string) {
@@ -30,6 +30,9 @@ export class SellerService {
   }
 
   update(sellerId:string, params: Seller) {
-    return this.http.post<ResponseData<Seller>>(`${baseUrl}/sellerId`, params);
+    return this.http.put<ResponseData<Seller>>(`${baseUrl}/${sellerId}`, params);
+  }
+  delete(sellerId:string) {
+    return this.http.delete<ResponseData<number>>(`${baseUrl}/${sellerId}`);
   }
 }

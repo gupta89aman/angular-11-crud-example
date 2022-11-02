@@ -11,37 +11,39 @@
 &nbsp;
 <!-- <button class="btn btn-sm btn-success mb-2" (click)="showContacted()" >Show Contacted</button> -->
 
-<table class="table table-striped table-bordered" >
+<table class="table table-striped" style="width:80%; position:relative; left:10%; margin-top:50px; border: 2px solid grey">
     <thead>
         <tr>
-            <th></th>
-            <th style="width: 5%;"></th>
-            <th style="width: 5%;">MB No</th>
-            <th style="width: 15%;">DOB Time</th>
-            <th style="width: 10%;">City/ State</th>
-            <th>Ht</th>
-            <th style="width: 10%;">Job</th>
-            <th style="width: 10%;">Native Place</th>
-            <th style="width: 10%;">Income Photo</th>
-            <th style="width: 5%;">Qualifi cation</th>
-            <th style="width: 10%;">Job City / State</th>
-            <th style="width: 10%;">Manglik</th>
-            <th style="width: 10%;">Source/ Date</th>
+            <th style="width: 7%;">Sl No</th>
+            <th style="width: 5%;">Brand</th>
+            <th style="width: 15%;">Product Name</th>
+            <th style="width: 5%;">Weight/Quanity</th>
+            <th style="width: 5%">Unit</th>
+            <th style="width: 5%;">Buy Price</th>
+            <th style="width: 5%;">MRP</th>
+            <th style="width: 5%;">Sell Price</th>
             <th></th>
         </tr>
     </thead>
     <tbody style="font-size: small;">
-        <tr *ngFor="let product of products; let ele = index" [ngStyle]="{'background-color' : true ? '#e7e7e7' : 'white' }" id={{product.pbId}}>
+        <tr style="border: 2px solid grey" *ngFor="let product of products; let ele = index" id={{product.pbId}}>
             <td>{{ (currentPage * perPage) + ele + 1}}</td>
-
+            <td>{{ product.Brand}}</td>
+            <td>{{ product.ProductName}}</td>
+            <td>{{ product.Quantity}}</td>
+            <td *ngIf="product.Unit == '1'">{{product.UnitPrice}}/KG</td>
+            <td *ngIf="product.Unit == '2'">{{product.UnitPrice}}/piece</td>
+            <td>{{ product.BuyPrice}}</td>
+            <td>{{ product.MRP}}</td>
+            <td>{{ product.SellPrice}}</td>
             <td style="white-space: nowrap">
                 <p>
-                <button (click)="deleteProduct(product.pbId)" class="btn btn-sm btn-danger btn-delete-user" [disabled]="true">
-                    <span *ngIf="true" class="spinner-border spinner-border-sm"></span>
-                    <span *ngIf="false">Delete</span>
+                <button (click)="deleteProduct(product.pbId)" class="btn btn-sm btn-danger btn-delete-user" [disabled]="working">
+                    <span *ngIf="working" class="spinner-border spinner-border-sm"></span>
+                    <span *ngIf="!working">Delete</span>
                 </button>
                 &nbsp;
-                <a routerLink="preferences" [queryParams]="{ page: currentPage }" class="btn btn-sm btn-success">Preferences</a>
+                <a [routerLink]="['edit', product.pbId]" [queryParams]="{ page: currentPage }" class="btn btn-sm btn-success">Edit</a>
                 &nbsp;
             </p>
             </td>

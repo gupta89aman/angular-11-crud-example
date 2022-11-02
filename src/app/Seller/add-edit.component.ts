@@ -37,13 +37,18 @@ export class SellerAddEditComponent implements OnInit {
 
         //const formOptions: AbstractControlOptions = { validators: MustMatch('password', 'confirmPassword') };
         this.form = this.formBuilder.group({
-            SellerId: ['', Validators.required],
+            SellerId: [''],
             CompanyName: [''],
             Name: ['', Validators.required],
             MbNo: ['', [Validators.required]]
         });
 
         if (!this.isAddMode) {
+          this.sellerService.getById(this.id)
+                .pipe(first())
+                .subscribe(x => {
+                          this.form.patchValue({...x.data});
+        });
         }
     }
 
@@ -51,9 +56,8 @@ export class SellerAddEditComponent implements OnInit {
     get f() { return this.form.controls; }
 
     onSubmit() {
-        this.submitted = true;
 
-        console.log('form invalid:' + this.form.invalid);
+      console.log('form invalid:' + this.form.invalid);
         // stop here if form is invalid
         if (this.form.invalid) {
             return;
@@ -69,12 +73,12 @@ export class SellerAddEditComponent implements OnInit {
 
     private createSeller() {
         this.seller = this.form.value;
-        console.log(this.form.get('manglik')?.value);
-
-
+        let len = this.seller.Name.indexOf(' ') > 0 ? this.seller.Name.indexOf(' ') : this.seller.Name.length;
+       this.seller.SellerId = `${this.seller.Name.substring(0, len)}-${this.seller.MbNo}`;
+       console.log(this.seller);
         this.sellerService.create(this.seller)
-        .subscribe(() => {
-            //this.alertService.success(`${this.path} added`, {keepAfterRouteChange: true});
+        .subscribe((seller) => {
+            console.log(seller.data.SellerId);
             this.routeToMainPage(0);
         })
         .add(() => this.loading = false);

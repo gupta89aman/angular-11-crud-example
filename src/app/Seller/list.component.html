@@ -26,25 +26,26 @@
             <td>{{user.CompanyName}} </td>
             <td> {{user.Name}}</td>
             <td>{{user.MbNo}}</td>
-            <!-- <td style="white-space: nowrap">
+            <td style="white-space: nowrap">
                 <p>
-                <button (click)="deleteUser(user.userId)" class="btn btn-sm btn-danger btn-delete-user" [disabled]="user.isDeleting">
-                    <span *ngIf="user.isDeleting" class="spinner-border spinner-border-sm"></span>
-                    <span *ngIf="!user.isDeleting">Delete</span>
+                <button (click)="deleteSeller(user.SellerId)" class="btn btn-sm btn-danger btn-delete-user" [disabled]="working">
+                    <span *ngIf="working" class="spinner-border spinner-border-sm"></span>
+                    <span *ngIf="!working">Delete</span>
                 </button>
                 &nbsp;
-                <a routerLink="preferences/{{ user.userId}}" [queryParams]="{ path: path, dob: user.dob, page: currentPage }" class="btn btn-sm btn-success">Preferences</a>
+                <a [routerLink]="['edit', user.SellerId]" [queryParams]="{ page: currentPage }" class="btn btn-sm btn-success">Edit</a>
+                <!-- <a routerLink="preferences/{{ user.SellerId}}" [queryParams]="{ path: path, dob: user.dob, page: currentPage }" class="btn btn-sm btn-success">Preferences</a> -->
                 &nbsp;
             </p>
-                <button (click)="generateMatches(user.waNr)" class="btn btn-sm btn-info">
+                <!-- <button (click)="generateMatches(user.waNr)" class="btn btn-sm btn-info">
                     <span>Generate</span>
                 </button>
                 &nbsp;
                 <button [disabled]="user.contacted === true" (click)="updatedContacted(user.waNr)" class="btn btn-sm btn-warning">
                     <span *ngIf="user.contacted === false">Contacted</span>
                     <span *ngIf="user.contacted === true">{{ user.contactedDate }}</span>
-                </button>
-            </td> -->
+                </button> -->
+            </td>
         </tr>
         <tr *ngIf="!sellers">
             <td colspan="4" class="text-center">

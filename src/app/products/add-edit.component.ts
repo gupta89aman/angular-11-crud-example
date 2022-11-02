@@ -33,7 +33,7 @@ export class ProductAddEditComponent implements OnInit {
     ngOnInit() {
         this.id = this.route.snapshot.params['id'];
         this.isAddMode = !this.id;
-
+        console.log(this.id);
         // password not required in edit mode
         const passwordValidators = [Validators.minLength(6)];
         if (this.isAddMode) {
@@ -82,8 +82,18 @@ export class ProductAddEditComponent implements OnInit {
         if (this.isAddMode) {
             this.createProduct();
         } else {
-            //this.updateUser();
+            this.updateProduct();
         }
+    }
+
+    private updateProduct() {
+      if(this.id != "0") {
+        let product = this.form.value;
+        this.productsService.update(this.id, product)
+        .subscribe(prod => console.log(prod.data));
+      }
+
+      this.routeToMainPage(0);
     }
 
     private createProduct() {

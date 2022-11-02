@@ -6,7 +6,7 @@ import { SellerService } from '@app/_services/Seller/Seller.service';
 import { Seller } from '@app/_models/ProductBrand';
 
 @Component({ templateUrl: 'list.component.html' })
-export class ListComponent implements OnInit {
+export class SellerListComponent implements OnInit {
     seller!: Seller[];
     sellers!: Seller[];
     path!: string;
@@ -17,6 +17,7 @@ export class ListComponent implements OnInit {
     currentPage!: number;
     firstRequest!: boolean;
     perPage: number;
+    working!: boolean;
 
     constructor(
         private route: ActivatedRoute,
@@ -27,6 +28,7 @@ export class ListComponent implements OnInit {
         }
         this.firstRequest = true;
         this.perPage = 10;
+        this.working = false;
     }
 
     ngOnInit() {
@@ -55,25 +57,29 @@ export class ListComponent implements OnInit {
         if(this.firstRequest !== true && this.currentPage == pageNr) {
             return;
         }
-
         this.firstRequest = false;
         this.currentPage = pageNr;
+        this.working = true;
         this.sellerService.getAllSellers(pageNr)
             .pipe(first())
             .subscribe(persons => {
               if(persons.code == 200)
                 this.sellers = persons.data;
             });
+
+            this.working = false;
     }
 
     //method to delete the user
-    deleteUser(id: string) {
+    deleteSeller(id: string) {
         const user = this.sellers.find(x => x.SellerId === id);
         if (!user) return;
 
-        // this.sellerService.delete(id, this.path)
-        //     .pipe(first())
-        //     .subscribe(() => this.persons = this.persons.filter(x => x.userId !== id));
+        this.sellerService.delete(id)
+            .pipe(first())
+            .subscribe((seller) => this.sellers = this.sellers.filter(sell => sell.SellerId != id));
+
+            //this.router.navigate(['Sellers'], { relativeTo: this.route })
     }
 
 }

@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 
 import { ProductsRoutingModule } from './products-routing.module';
 import { LayoutComponent } from './layout.component';
-import { ListComponent } from './list.component';
+import { ProductListComponent } from './list.component';
 import { ProductAddEditComponent } from './add-edit.component';
 //import { AddEditPreferComponent } from './add-edit-prefer.component';
 import { ProductsService } from '@app/_services/products/products.service';
@@ -19,7 +19,7 @@ import { SellerService } from '@app/_services/Seller/Seller.service';
     ],
     declarations: [
         LayoutComponent,
-        ListComponent,
+        ProductListComponent,
         ProductAddEditComponent,
     ],
     providers: [
