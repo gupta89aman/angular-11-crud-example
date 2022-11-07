@@ -23,7 +23,8 @@ interface ProductBrand extends IBase{
 
 interface ResponseData<T> {
   code: number,
-  data: T
+  data: T,
+  total: number
 }
 
 interface Seller extends IBase{

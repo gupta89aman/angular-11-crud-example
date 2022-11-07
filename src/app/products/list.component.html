@@ -2,8 +2,10 @@
 <form (ngSubmit)="onSubmit()">
 <table style="width: 300px; float: right;">
     <tr>
-    <td style="width: 5%; padding: 15px;"><input placeholder="Search..." type="text" required [(ngModel)]="prodName" name="prodName" /></td>
-    <td><input type="submit" value="Search" class="btn btn-sm btn-primary"/></td>
+    <td style="width: 5%; padding: 15px;">
+      <input placeholder="Search..." type="text" #prodName required ngModel  name="prodName" />
+    </td>
+    <!-- <td><input type="submit" value="Search" class="btn btn-sm btn-primary"/></td> -->
 </tr>
 </table>
 </form>

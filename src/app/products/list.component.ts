@@ -1,12 +1,13 @@
-﻿import { Component, OnInit } from '@angular/core';
-import { first } from 'rxjs/operators';
+﻿import { Component, ElementRef, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { debounceTime, distinctUntilChanged, first, switchMap } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map } from 'rxjs/operators';
-import { ProductBrand } from '@app/_models/ProductBrand';
+import { ProductBrand, ResponseData } from '@app/_models/ProductBrand';
 import { ProductsService } from '@app/_services/products/products.service';
+import { fromEvent, of, Subject } from 'rxjs';
 
 @Component({ templateUrl: 'list.component.html' })
-export class ProductListComponent implements OnInit {
+export class ProductListComponent implements OnInit , AfterViewInit{
     products!: ProductBrand[];
     page!: number;
     count!: number;
@@ -18,6 +19,7 @@ export class ProductListComponent implements OnInit {
     showContactedText!: string;
     prodName!:string;
     working!: boolean;
+    @ViewChild('prodName') inputRef!: ElementRef<HTMLInputElement>;
 
     constructor(
         private route: ActivatedRoute,
@@ -29,6 +31,7 @@ export class ProductListComponent implements OnInit {
         this.firstRequest = true;
         this.perPage = 10;
         this.working = false;
+
     }
 
     ngOnInit() {
@@ -39,10 +42,14 @@ export class ProductListComponent implements OnInit {
                                                                 this.page = isNaN(num) ? 0 : num;
                                                             });
         this.currentPage = 0;
+
         this.getAll(this.page);
 
     }
 
+    ngAfterViewInit() {
+      this.search();
+    }
     //get all the users based on page number
     getAll(pageNr: number = 0) {
         // no need to call api if we click on the current page
@@ -55,12 +62,8 @@ export class ProductListComponent implements OnInit {
         this.firstRequest = false;
         this.currentPage = pageNr;
         this.working = true;
-        this.productService.getAllProducts(pageNr)
-            .pipe(first())
-            .subscribe(prods => {
-                this.products = prods.data;
-                console.log(this.products);
-            });
+        this.getAllProductsFromAPI(pageNr)
+          .subscribe(prods => this.products = prods.data );
             this.working = false;
             return;
     }
@@ -68,6 +71,29 @@ export class ProductListComponent implements OnInit {
     //method to search particular person based on mobile number
     onSubmit() {
 
+    }
+
+    getAllProductsFromAPI(pageNr: number) {
+        return this.productService.getAllProducts(pageNr);
+    }
+
+    search() {
+      try{
+      const prod = fromEvent(this.inputRef.nativeElement, 'keyup').pipe(
+                   map((event: any) => event?.target.value),
+                   debounceTime(1000),
+                   distinctUntilChanged(),
+                   switchMap((value) => value ? this.productService.search(value) : this.getAllProductsFromAPI(this.page)));
+
+      prod.subscribe(data => {
+        if(data) {
+          this.products = data.data;
+        }
+      });
+    }catch(err)
+    {
+      console.error(err);
+    }
     }
 
     deleteProduct(pbId: string) {
