@@ -21,7 +21,7 @@ export class ProductsService {
   }
 
   getAllProducts(pageNr: number = 0) {
-    let response = this.http.get<ResponseData<ProductBrand[]>>(`${baseUrl}`);
+    let response = this.http.get<ResponseData<ProductBrand[]>>(`${baseUrl}/?page=${pageNr}`);
     return response;
   }
 

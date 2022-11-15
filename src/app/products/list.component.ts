@@ -29,21 +29,21 @@ export class ProductListComponent implements OnInit , AfterViewInit{
                 return false;
         }
         this.firstRequest = true;
-        this.perPage = 10;
+        this.perPage = 15;
         this.working = false;
-
+        this.currentPage = 0;
     }
 
     ngOnInit() {
 
-        this.route.queryParamMap
-        .pipe(map(params => params.get('page') || 'None')).subscribe(result =>  {
-                                                                let num = Number.parseInt(result);
-                                                                this.page = isNaN(num) ? 0 : num;
-                                                            });
-        this.currentPage = 0;
+      this.route.queryParamMap
+      .pipe(map(params => params.get('page') || 'None'))
+      .subscribe(result => {
+          let num = Number.parseInt(result);
+          this.currentPage = isNaN(num) ? 0 : num;
+      });
 
-        this.getAll(this.page);
+      this.getAll(this.currentPage);
 
     }
 
@@ -63,8 +63,14 @@ export class ProductListComponent implements OnInit , AfterViewInit{
         this.currentPage = pageNr;
         this.working = true;
         this.getAllProductsFromAPI(pageNr)
-          .subscribe(prods => this.products = prods.data );
+          .subscribe(prods => {
+                  this.products = prods.data;
+                  this.page =  Math.ceil(prods.total / 15);
+                  //used for paging purpose,stores page numbers to show on front html view
+                  this.loopArray = new Array(this.page);
+                });
             this.working = false;
+
             return;
     }
 
@@ -83,7 +89,7 @@ export class ProductListComponent implements OnInit , AfterViewInit{
                    map((event: any) => event?.target.value),
                    debounceTime(1000),
                    distinctUntilChanged(),
-                   switchMap((value) => value ? this.productService.search(value) : this.getAllProductsFromAPI(this.page)));
+                   switchMap((value) => value ? this.productService.search(value) : this.getAllProductsFromAPI(this.currentPage)));
 
       prod.subscribe(data => {
         if(data) {
